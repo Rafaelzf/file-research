@@ -6,6 +6,7 @@ import Search from "./Search";
 import ResearchCards from "./ResearchCards";
 import SearchAllFiles from "./SearchAllFiles";
 import FileUploader from "./FileUploader";
+import ComboBox from "./ComboBox";
 
 export {
   Convex,
@@ -16,4 +17,5 @@ export {
   ResearchCards,
   SearchAllFiles,
   FileUploader,
+  ComboBox,
 };
