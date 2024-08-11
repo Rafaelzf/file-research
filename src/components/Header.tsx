@@ -11,6 +11,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { AlignJustify } from "lucide-react";
+import { Button } from "./ui/button";
 function Header() {
   return (
     <div className="relative z-10 border-b py-4 bg-gray-50">
@@ -22,7 +23,9 @@ function Header() {
 
         <div className="flex gap-2">
           <SignedOut>
-            <SignInButton />
+            <SignInButton>
+              <Button>SignIn</Button>
+            </SignInButton>
           </SignedOut>
           <SignedIn>
             <UserButton />
@@ -33,7 +36,9 @@ function Header() {
               <DropdownMenuContent>
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>Meu painel</DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Link href="/painel/all-files">Meu painel</Link>
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </SignedIn>

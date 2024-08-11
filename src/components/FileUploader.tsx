@@ -17,6 +17,8 @@ import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { Loader2, FileX, FileHeart, FileCheck2 } from "lucide-react";
 import ComboBox from "./ComboBox";
+import { useMutation } from "convex/react";
+import { api } from "../../convex/_generated/api";
 
 const formSchema = z.object({
   fileName: z.string().min(1, "Nome do arquivo é obrigatório").max(200),
@@ -34,13 +36,15 @@ const formSchema = z.object({
         Array.from(files).every((file) => file.type === "application/pdf"),
       "Somente arquivos PDF são permitidos"
     ),
-  tags: z.array(z.string()).optional(),
+  tags: z.array(z.string()).min(1, "Pelo menos uma categoria é necessária"), // Define o mínimo de 1 tag com mensagem de erro
 });
 
 export default function FileUploader() {
   const [file, setFile] = useState<File[]>([]);
   const [fileError, setFileError] = useState<string | null>(null);
   const [categories, setCategories] = useState<string[]>([]);
+
+  const createFile = useMutation(api.files.createFile);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -117,7 +121,16 @@ export default function FileUploader() {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+    if (!values) return;
+
+    createFile({
+      fileName: values.fileName,
+      uploader: {
+        name: "John Doe",
+        email: "johndoe@example.com",
+      },
+      categories: values.tags,
+    });
   }
 
   return (
@@ -138,17 +151,27 @@ export default function FileUploader() {
             )}
           />
 
-          <div>
-            <p className="text-sm text-destructive text-right mb-2">
-              {categories.length >= 3 && <> Máximo de categorias atingido.</>}
-            </p>
-
-            <ComboBox
-              addCategories={addCategories}
-              removeCategories={removeCategories}
-              limit={3}
-            />
-          </div>
+          <FormField
+            control={form.control}
+            name="tags"
+            render={() => (
+              <FormItem>
+                <p className="text-sm text-destructive text-right mb-2">
+                  {categories.length >= 3 && (
+                    <> Máximo de categorias atingido.</>
+                  )}
+                </p>
+                <FormMessage className="text-sm text-destructive text-right mb-2" />
+                <FormControl>
+                  <ComboBox
+                    addCategories={addCategories}
+                    removeCategories={removeCategories}
+                    limit={3}
+                  />
+                </FormControl>
+              </FormItem>
+            )}
+          />
         </div>
 
         <div
