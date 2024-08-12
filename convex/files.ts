@@ -11,6 +11,16 @@ export const createFile = mutation({
     categories: v.array(v.string()),
   },
   async handler(ctx, args) {
+    const identity = await ctx.auth.getUserIdentity();
+
+    if (!identity) {
+      throw new ConvexError("Você precisa estar logado para fazer isso.");
+    }
+
+    console.log(identity.tokenIdentifier);
+
+    return;
+
     try {
       await ctx.db.insert("files", {
         fileName: args.fileName,

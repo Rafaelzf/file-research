@@ -98,10 +98,7 @@ export default function FileUploader() {
     [form]
   );
 
-  const removeFile = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.stopPropagation(); // Impede a propagação do evento para outros elementos
-    event.preventDefault(); // Impede a ação padrão do evento
-
+  const removeFile = () => {
     const emptyFileArray: File[] = [];
     const emptyFileList = new DataTransfer().files;
     setFile(emptyFileArray);
@@ -131,6 +128,9 @@ export default function FileUploader() {
       },
       categories: values.tags,
     });
+
+    form.reset();
+    removeFile();
   }
 
   return (
