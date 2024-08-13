@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import "./globals.css";
 
 import { ConvexClientProvider } from "./ConvexClientProvider";
-
+import { Toaster } from "@/components/ui/toaster";
 import Header from "@/components/Header";
 import { Footer } from "@/components";
 
@@ -36,6 +36,7 @@ export default function RootLayout({
             <main className="flex-1">{children}</main>
             <Footer />
           </div>
+          <Toaster />
         </body>
       </ConvexClientProvider>
     </html>

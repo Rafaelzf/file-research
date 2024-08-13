@@ -1,5 +1,13 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useCallback, useRef, useState } from "react";
+import { useDropzone } from "react-dropzone";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { Input } from "./ui/input";
+import { Button } from "./ui/button";
+import { useToast } from "@/components/ui/use-toast";
 import {
   Form,
   FormControl,
@@ -8,17 +16,22 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useCallback, useState } from "react";
-import { useDropzone } from "react-dropzone";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { Input } from "./ui/input";
-import { Button } from "./ui/button";
-import { Loader2, FileX, FileHeart, FileCheck2 } from "lucide-react";
 import ComboBox from "./ComboBox";
+import { Loader2, FileX, FileHeart, FileCheck2 } from "lucide-react";
+
 import { useMutation } from "convex/react";
 import { api } from "../../convex/_generated/api";
+import { Doc } from "../../convex/_generated/dataModel";
+
+const labels = [
+  "feature",
+  "bug",
+  "enhancement",
+  "documentation",
+  "design",
+  "question",
+  "maintenance",
+];
 
 const formSchema = z.object({
   fileName: z.string().min(1, "Nome do arquivo é obrigatório").max(200),
@@ -40,10 +53,14 @@ const formSchema = z.object({
 });
 
 export default function FileUploader() {
+  const childRef = useRef<{ clearLabels: () => void }>(null);
   const [file, setFile] = useState<File[]>([]);
   const [fileError, setFileError] = useState<string | null>(null);
+  const [tags, seTags] = useState<string[]>([...labels]);
   const [categories, setCategories] = useState<string[]>([]);
+  const { toast } = useToast();
 
+  const generateUploadUrl = useMutation(api.files.generateUploadUrl);
   const createFile = useMutation(api.files.createFile);
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -74,6 +91,12 @@ export default function FileUploader() {
     },
     [form, categories, setCategories]
   );
+
+  const removeAllCategories = useCallback(() => {
+    const newCategories: any[] = [];
+    setCategories(newCategories);
+    form.setValue("tags", newCategories);
+  }, [categories, setCategories]);
 
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
@@ -120,17 +143,52 @@ export default function FileUploader() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     if (!values) return;
 
-    createFile({
-      fileName: values.fileName,
-      uploader: {
-        name: "John Doe",
-        email: "johndoe@example.com",
-      },
-      categories: values.tags,
+    const postUrl = await generateUploadUrl();
+    const fileType = values.file[0]!.type;
+
+    const result = await fetch(postUrl, {
+      method: "POST",
+      headers: { "Content-Type": fileType },
+      body: values.file[0],
     });
 
+    const { storageId } = await result.json();
+
+    const type = {
+      "application/pdf": "pdf",
+    } as Record<string, Doc<"files">["type"]>;
+
+    try {
+      createFile({
+        fileName: values.fileName,
+        type: type[fileType],
+        filedId: storageId,
+        uploader: {
+          name: "John Doe",
+          email: "johndoe@example.com",
+        },
+        categories: values.tags,
+      });
+
+      toast({
+        variant: "success",
+        title: "File Uploaded",
+        description: "Now everyone can view your file",
+      });
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Something went wrong",
+        description: "Your file could not be uploaded, try again later",
+      });
+      console.error("Detalhes do erro:", error);
+    }
+    removeAllCategories();
     form.reset();
     removeFile();
+    if (childRef.current) {
+      childRef.current.clearLabels();
+    }
   }
 
   return (
@@ -164,6 +222,8 @@ export default function FileUploader() {
                 <FormMessage className="text-sm text-destructive text-right mb-2" />
                 <FormControl>
                   <ComboBox
+                    ref={childRef}
+                    tags={tags}
                     addCategories={addCategories}
                     removeCategories={removeCategories}
                     limit={3}

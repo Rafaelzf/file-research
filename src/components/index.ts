@@ -1,4 +1,3 @@
-import Convex from "./convex";
 import Header from "./Header";
 import Footer from "./Footer";
 import HomeHeader from "./HomeHeader";
@@ -9,7 +8,6 @@ import FileUploader from "./FileUploader";
 import ComboBox from "./ComboBox";
 
 export {
-  Convex,
   Header,
   Footer,
   HomeHeader,
