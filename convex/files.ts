@@ -1,5 +1,5 @@
 import { ConvexError, v } from "convex/values";
-import { mutation } from "./_generated/server";
+import { mutation, query } from "./_generated/server";
 import { fileType } from "./schema";
 
 export const createFile = mutation({
@@ -17,7 +17,9 @@ export const createFile = mutation({
     const identity = await ctx.auth.getUserIdentity();
 
     if (!identity) {
-      throw new ConvexError("Você precisa estar logado para fazer isso.");
+      throw new ConvexError({
+        message: "Você precisa estar logado para fazer isso.",
+      });
     }
 
     try {
@@ -34,9 +36,9 @@ export const createFile = mutation({
       });
     } catch (error) {
       console.error(error);
-      throw new ConvexError(
-        "Algo deu errado ao inserir o arquivo na tabela file"
-      );
+      throw new ConvexError({
+        message: "Algo deu errado ao inserir o arquivo na tabela file",
+      });
     }
   },
 });
@@ -49,4 +51,20 @@ export const generateUploadUrl = mutation(async (ctx) => {
   }
 
   return await ctx.storage.generateUploadUrl();
+});
+
+export const listAllStorageFiles = query({
+  handler: async (ctx) => {
+    // You can use .paginate() as well
+    return await ctx.db.system.query("_storage").collect();
+  },
+});
+
+export const deleteStorageFileById = mutation({
+  args: {
+    storageId: v.id("_storage"),
+  },
+  handler: async (ctx, args) => {
+    return await ctx.storage.delete(args.storageId);
+  },
 });

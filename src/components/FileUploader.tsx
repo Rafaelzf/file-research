@@ -22,7 +22,7 @@ import { Loader2, FileX, FileHeart, FileCheck2 } from "lucide-react";
 import { useMutation } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import { Doc } from "../../convex/_generated/dataModel";
-
+import { ConvexError } from "convex/values";
 const labels = [
   "feature",
   "bug",
@@ -159,7 +159,7 @@ export default function FileUploader() {
     } as Record<string, Doc<"files">["type"]>;
 
     try {
-      createFile({
+      await createFile({
         fileName: values.fileName,
         type: type[fileType],
         filedId: storageId,
@@ -175,13 +175,17 @@ export default function FileUploader() {
         title: "File Uploaded",
         description: "Now everyone can view your file",
       });
-    } catch (error) {
+    } catch (error: unknown) {
+      const errorMessage =
+        error instanceof ConvexError
+          ? (error.data as { message: string }).message
+          : "Your file could not be uploaded, try again later";
+
       toast({
         variant: "destructive",
-        title: "Something went wrong",
-        description: "Your file could not be uploaded, try again later",
+        title: "Algo deu errado",
+        description: errorMessage,
       });
-      console.error("Detalhes do erro:", error);
     }
     removeAllCategories();
     form.reset();
@@ -246,6 +250,7 @@ export default function FileUploader() {
                 <FormControl>
                   <Input
                     type="file"
+                    accept="application/pdf"
                     onChange={(event) => {
                       if (!event.target.files) return;
                       const file = event.target.files[0];

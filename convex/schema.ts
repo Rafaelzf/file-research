@@ -23,4 +23,8 @@ export default defineSchema({
     email: v.string(),
     role: v.string(),
   }).index("by_tokenIdentifier", ["tokenIdentifier"]),
+  categories: defineTable({
+    name: v.string(),
+    description: v.optional(v.string()),
+  }).index("by_name", ["name"]),
 });

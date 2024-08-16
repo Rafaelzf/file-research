@@ -6,6 +6,8 @@ import ResearchCards from "./ResearchCards";
 import SearchAllFiles from "./SearchAllFiles";
 import FileUploader from "./FileUploader";
 import ComboBox from "./ComboBox";
+import Datatable from "./Datatable";
+import EditCategories from "./EditCategories";
 
 export {
   Header,
@@ -16,4 +18,6 @@ export {
   SearchAllFiles,
   FileUploader,
   ComboBox,
+  Datatable,
+  EditCategories,
 };

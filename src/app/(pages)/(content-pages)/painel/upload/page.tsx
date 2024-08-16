@@ -10,17 +10,9 @@ export default function Upload() {
           <span>Upload File</span>
           <FileUp height={30} width={30} />
         </h2>
-
-        <div className="flex items-center">
-          <SearchAllFiles />
-        </div>
       </div>
 
-      <div>
-        <h3 className="flex gap-3 mt-8 scroll-m-20 text-1xl font-semibold tracking-tight mb-10">
-          <span>Número de arquivos</span> <Badge>1</Badge>
-        </h3>
-
+      <div className="mt-20">
         <FileUploader />
       </div>
     </div>
