@@ -51,7 +51,12 @@ export default function Actions({ row }: { row: Row<CategoriesType> }) {
         isOpen={isOpen}
         onOpenChange={setIsOpen}
       >
-        <EditCategories categoryId={row.original._id} />
+        <EditCategories
+          categoryId={row.original._id}
+          setIsOpen={setIsOpen}
+          propName={row.original.name}
+          propDescription={row.original.description || ""}
+        />
       </DialogModal>
 
       <DropdownMenu>

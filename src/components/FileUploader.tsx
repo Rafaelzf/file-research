@@ -1,5 +1,5 @@
 "use client";
-
+import { useUser } from "@clerk/clerk-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useCallback, useRef, useState } from "react";
 import { useDropzone } from "react-dropzone";
@@ -19,19 +19,10 @@ import {
 import ComboBox from "./ComboBox";
 import { Loader2, FileX, FileHeart, FileCheck2 } from "lucide-react";
 
-import { useMutation } from "convex/react";
+import { useMutation, useQuery } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import { Doc } from "../../convex/_generated/dataModel";
 import { ConvexError } from "convex/values";
-const labels = [
-  "feature",
-  "bug",
-  "enhancement",
-  "documentation",
-  "design",
-  "question",
-  "maintenance",
-];
 
 const formSchema = z.object({
   fileName: z.string().min(1, "Nome do arquivo é obrigatório").max(200),
@@ -56,12 +47,19 @@ export default function FileUploader() {
   const childRef = useRef<{ clearLabels: () => void }>(null);
   const [file, setFile] = useState<File[]>([]);
   const [fileError, setFileError] = useState<string | null>(null);
-  const [tags, seTags] = useState<string[]>([...labels]);
   const [categories, setCategories] = useState<string[]>([]);
   const { toast } = useToast();
+  const { isSignedIn, user } = useUser();
 
   const generateUploadUrl = useMutation(api.files.generateUploadUrl);
   const createFile = useMutation(api.files.createFile);
+  const categoriesData = useQuery(api.categories.listAllCategorie);
+
+  let newCategorieData = [""];
+
+  if (categoriesData) {
+    newCategorieData = categoriesData.map((item) => item.name);
+  }
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -143,6 +141,15 @@ export default function FileUploader() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     if (!values) return;
 
+    if (!isSignedIn) {
+      toast({
+        variant: "destructive",
+        title: "Ação não permitida",
+        description: "Você precisa estar logado para realizar esta ação",
+      });
+      return;
+    }
+
     const postUrl = await generateUploadUrl();
     const fileType = values.file[0]!.type;
 
@@ -164,8 +171,8 @@ export default function FileUploader() {
         type: type[fileType],
         filedId: storageId,
         uploader: {
-          name: "John Doe",
-          email: "johndoe@example.com",
+          name: user ? user?.fullName || "" : "",
+          email: user ? user?.primaryEmailAddress?.emailAddress || "" : "",
         },
         categories: values.tags,
       });
@@ -227,7 +234,7 @@ export default function FileUploader() {
                 <FormControl>
                   <ComboBox
                     ref={childRef}
-                    tags={tags}
+                    tags={newCategorieData}
                     addCategories={addCategories}
                     removeCategories={removeCategories}
                     limit={3}

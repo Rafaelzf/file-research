@@ -60,7 +60,7 @@ export default function CreateCategories({ onSuccess }: CreateCategoriesProps) {
 
     try {
       await createCategorie({
-        name: values.name,
+        name: values.name.toLowerCase(),
         description: values.description,
       });
 

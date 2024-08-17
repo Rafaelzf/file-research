@@ -3,8 +3,23 @@ import { MutationCtx, QueryCtx, mutation, query } from "./_generated/server";
 
 export const listAllCategorie = query({
   handler: async (ctx) => {
-    const categories = await ctx.db.query("categories").collect();
-    return categories;
+    const identity = await ctx.auth.getUserIdentity();
+
+    if (!identity) {
+      throw new ConvexError({
+        message: "Você precisa estar logado para fazer isso.",
+      });
+    }
+
+    try {
+      const categories = await ctx.db.query("categories").collect();
+      return categories;
+    } catch (error) {
+      console.error(error);
+      throw new ConvexError({
+        message: "Algo deu errado ao tentar obter as categorias.",
+      });
+    }
   },
 });
 
@@ -46,7 +61,9 @@ export const createCategorie = mutation({
       });
     }
 
-    const categorieNamed = await hasCategories(ctx, args.name);
+    const lowerName = args.name.toLowerCase();
+
+    const categorieNamed = await hasCategories(ctx, lowerName);
 
     if (categorieNamed.length > 0) {
       throw new ConvexError({
@@ -56,7 +73,7 @@ export const createCategorie = mutation({
 
     try {
       await ctx.db.insert("categories", {
-        name: args.name,
+        name: lowerName,
         description: args.description || "***",
       });
     } catch (error) {
@@ -85,6 +102,35 @@ export const deleteCategorie = mutation({
     } catch (error) {
       throw new ConvexError({
         message: "Algo deu errado ao deletar a categoria.",
+      });
+    }
+  },
+});
+
+export const updateCategorie = mutation({
+  args: {
+    _id: v.id("categories"),
+    name: v.optional(v.string()),
+    description: v.optional(v.string()),
+  },
+  async handler(ctx, args) {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) {
+      throw new ConvexError({
+        message: "Você precisa estar logado para fazer isso.",
+      });
+    }
+
+    const lowerName = args.name && args.name.toLowerCase();
+
+    try {
+      await ctx.db.patch(args._id, {
+        name: lowerName,
+        description: args.description,
+      });
+    } catch (error) {
+      throw new ConvexError({
+        message: "Algo deu errado ao atualizar essa categoria.",
       });
     }
   },
