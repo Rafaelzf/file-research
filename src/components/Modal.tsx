@@ -24,7 +24,7 @@ export default function DialogModal({
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
           <DialogDescription>
-            Make changes to your profile here. Click save when you're done.
+            Make changes to your profile here. Click save when youre done.
           </DialogDescription>
         </DialogHeader>
         {children}

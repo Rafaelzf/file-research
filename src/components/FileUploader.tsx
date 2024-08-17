@@ -94,7 +94,7 @@ export default function FileUploader() {
     const newCategories: any[] = [];
     setCategories(newCategories);
     form.setValue("tags", newCategories);
-  }, [categories, setCategories, form]);
+  }, [setCategories, form]);
 
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
