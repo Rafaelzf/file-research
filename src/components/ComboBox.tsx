@@ -116,5 +116,5 @@ const ComboBox = React.forwardRef(
     );
   }
 );
-
+ComboBox.displayName = "ComboBox";
 export default ComboBox;

@@ -20,7 +20,7 @@ export default function AllFiles() {
         <h3 className="flex gap-3 mt-8 scroll-m-20 text-1xl font-semibold tracking-tight mb-10">
           <span>Número de arquivos</span> <Badge>1</Badge>
         </h3>
-        "conteudo"
+        conteudo
       </div>
     </div>
   );
