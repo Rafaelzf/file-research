@@ -1,19 +1,14 @@
 "use client";
 
-import { MoreHorizontal, ArrowUpDown, Trash2, Pencil } from "lucide-react";
+import { ArrowUpDown } from "lucide-react";
 import { ColumnDef } from "@tanstack/react-table";
 import { CategoriesType } from "./categoriesTypes";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
+import { Button } from "@/components/ui/button";
+import { sortColorsTag } from "@/lib/utils";
+
+import { Actions } from "@/components";
 
 export const columns: ColumnDef<CategoriesType>[] = [
   {
@@ -29,39 +24,23 @@ export const columns: ColumnDef<CategoriesType>[] = [
         </Button>
       );
     },
+    cell: ({ row }) => {
+      return (
+        <Badge className={`${sortColorsTag()} ml-3 `}>
+          {row.original.name}
+        </Badge>
+      );
+    },
   },
   {
-    accessorKey: "id",
-    header: "Id",
+    accessorKey: "description",
+    header: "Descrição",
+    cell: ({ row }) => {
+      return <div>{row.original.description}</div>;
+    },
   },
   {
     id: "actions",
-    cell: ({ row }) => {
-      const payment = row.original;
-
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="start">
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.id)}
-              className="flex items-center gap-2"
-            >
-              <Pencil width={17} height={17} />
-              <span>Edit</span>
-            </DropdownMenuItem>
-            <DropdownMenuItem className="flex items-center gap-2">
-              <Trash2 width={17} height={17} />
-              <span>Delete</span>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
-    },
+    cell: ({ row }) => <Actions row={row} />,
   },
 ];

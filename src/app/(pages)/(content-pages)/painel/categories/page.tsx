@@ -2,14 +2,19 @@
 import { Badge } from "@/components/ui/badge";
 import { FileUp } from "lucide-react";
 import { columns } from "./columns";
-import { categoriesData } from "./categoriesTypes";
+
 import DataTable from "@/components/Datatable";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { EditCategories } from "@/components";
+import { CreateCategories } from "@/components";
 import { useState } from "react";
+import { useQuery } from "convex/react";
+import { api } from "../../../../../../convex/_generated/api";
 
 export default function Categories() {
   const [activeTab, setActiveTab] = useState("categorias");
+  const categories = useQuery(api.categories.listAllCategorie);
+
+  console.log(categories);
   return (
     <div>
       <div className="flex flex-wrap justify-between items-center w-full border-b pb-4">
@@ -21,7 +26,8 @@ export default function Categories() {
 
       <div>
         <h3 className="flex gap-3 mt-8 scroll-m-20 text-1xl font-semibold tracking-tight mb-10">
-          <span>Número de categorias</span> <Badge>1</Badge>
+          <span>Número de categorias</span>
+          <Badge>{categories?.length || "?"}</Badge>
         </h3>
 
         <div>
@@ -31,10 +37,12 @@ export default function Categories() {
               <TabsTrigger value="addNew">Adicionar novas</TabsTrigger>
             </TabsList>
             <TabsContent value="categorias">
-              <DataTable columns={columns} data={categoriesData} />
+              {categories && categories.length && (
+                <DataTable columns={columns} data={categories} />
+              )}
             </TabsContent>
             <TabsContent value="addNew">
-              <EditCategories onSuccess={() => setActiveTab("categorias")} />
+              <CreateCategories onSuccess={() => setActiveTab("categorias")} />
             </TabsContent>
           </Tabs>
         </div>

@@ -24,6 +24,7 @@ export default defineSchema({
     role: v.string(),
   }).index("by_tokenIdentifier", ["tokenIdentifier"]),
   categories: defineTable({
+    _id: v.optional(v.id("categories")),
     name: v.string(),
     description: v.optional(v.string()),
   }).index("by_name", ["name"]),

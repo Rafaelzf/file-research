@@ -1,15 +1,8 @@
-export type CategoriesType = {
-  id: string;
-  name: string;
-};
+import { Id } from "../../../../../../convex/_generated/dataModel";
 
-export const categoriesData: CategoriesType[] = [
-  {
-    id: "728ed52f",
-    name: "m@example.com",
-  },
-  {
-    id: "489e1d42",
-    name: "example@gmail.com",
-  },
-];
+export type CategoriesType = {
+  _id: Id<"categories">;
+  name: string;
+  description?: string;
+  _creationTime: number;
+};

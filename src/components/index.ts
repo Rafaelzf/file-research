@@ -7,7 +7,9 @@ import SearchAllFiles from "./SearchAllFiles";
 import FileUploader from "./FileUploader";
 import ComboBox from "./ComboBox";
 import Datatable from "./Datatable";
+import CreateCategories from "./CreateCategories";
 import EditCategories from "./EditCategories";
+import Actions from "./Actions";
 
 export {
   Header,
@@ -19,5 +21,7 @@ export {
   FileUploader,
   ComboBox,
   Datatable,
+  CreateCategories,
   EditCategories,
+  Actions,
 };

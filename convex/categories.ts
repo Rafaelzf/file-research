@@ -1,5 +1,4 @@
 import { ConvexError, v } from "convex/values";
-
 import { MutationCtx, QueryCtx, mutation, query } from "./_generated/server";
 
 export const listAllCategorie = query({
@@ -58,13 +57,35 @@ export const createCategorie = mutation({
     try {
       await ctx.db.insert("categories", {
         name: args.name,
-        description: args.description,
+        description: args.description || "***",
       });
     } catch (error) {
       console.error(error);
-      throw new ConvexError(
-        "Algo deu errado ao inserir a categoria na tabela categories"
-      );
+      throw new ConvexError({
+        message: "Algo deu errado ao inserir a categoria na tabela categories",
+      });
+    }
+  },
+});
+
+export const deleteCategorie = mutation({
+  args: {
+    _id: v.id("categories"),
+  },
+  async handler(ctx, args) {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) {
+      throw new ConvexError({
+        message: "Você precisa estar logado para fazer isso.",
+      });
+    }
+
+    try {
+      await ctx.db.delete(args._id);
+    } catch (error) {
+      throw new ConvexError({
+        message: "Algo deu errado ao deletar a categoria.",
+      });
     }
   },
 });
