@@ -13,6 +13,7 @@ export default defineSchema({
       name: v.string(),
       userId: v.string(),
     }),
+    shouldDelete: v.optional(v.boolean()),
     categories: v.array(v.string()),
   }).index("by_filedId", ["filedId"]),
   users: defineTable({
