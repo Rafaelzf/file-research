@@ -109,7 +109,7 @@ export default function ResearchCards({ file }: { file: PropsResearchCards }) {
               <>
                 {file.categories.map((category) => {
                   return (
-                    <li>
+                    <li key={category}>
                       <Badge className="bg-indigo-500 hover:bg-indigo-600">
                         {category}
                       </Badge>
