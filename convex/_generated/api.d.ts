@@ -17,7 +17,9 @@ import type {
 import type * as categories from "../categories.js";
 import type * as clerk from "../clerk.js";
 import type * as files from "../files.js";
+import type * as gpt from "../gpt.js";
 import type * as http from "../http.js";
+import type * as semantic_scholar from "../semantic_scholar.js";
 import type * as users from "../users.js";
 
 /**
@@ -32,7 +34,9 @@ declare const fullApi: ApiFromModules<{
   categories: typeof categories;
   clerk: typeof clerk;
   files: typeof files;
+  gpt: typeof gpt;
   http: typeof http;
+  semantic_scholar: typeof semantic_scholar;
   users: typeof users;
 }>;
 export declare const api: FilterApi<
