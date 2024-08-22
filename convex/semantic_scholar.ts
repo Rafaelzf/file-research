@@ -1,21 +1,96 @@
 import fetch from "node-fetch";
-import { v } from "convex/values";
+import { ConvexError, v } from "convex/values";
 import { action } from "./_generated/server";
 
-export const getPapers = action({
+export const getRelevantPapers = action({
   args: {
     searchTerm: v.any(),
   },
-  handler: async (ctx, args) => {
-    const response = await fetch(
-      `https://api.semanticscholar.org/graph/v1/paper/search?query=${encodeURIComponent(args.searchTerm)}&fields=title,authors,year,abstract,url`,
-      {
-        method: "GET",
-      }
+  handler: async (_, args) => {
+    const url = new URL(
+      "https://api.semanticscholar.org/graph/v1/paper/search"
     );
-    if (response.ok) {
+    const query = encodeURIComponent(args.searchTerm);
+    const fields = [
+      "paperId",
+      "corpusId",
+      "url",
+      "title",
+      "venue",
+      "publicationVenue",
+      "year",
+      "authors",
+      "externalIds",
+      "abstract",
+      "referenceCount",
+      "citationCount",
+      "influentialCitationCount",
+      "isOpenAccess",
+      "openAccessPdf",
+      "fieldsOfStudy",
+      "s2FieldsOfStudy",
+      "publicationTypes",
+      "publicationDate",
+      "journal",
+      "citationStyles",
+    ].join(",");
+
+    url.searchParams.append("query", query);
+    url.searchParams.append("limit", "6");
+    url.searchParams.append("fields", fields);
+
+    try {
+      const response = await fetch(url.toString(), {
+        method: "GET",
+      });
+      if (response.ok) {
+        const data = await response.json();
+        return data.data; // retorna a lista de papers
+      } else {
+        console.error("Failed to fetch data:", response);
+        throw new ConvexError({
+          message: response.statusText,
+        });
+      }
+    } catch (error: unknown) {
+      const errorMessage =
+        error instanceof ConvexError
+          ? (error.data as { message: string }).message
+          : "Your file could not be uploaded, try again later";
+
+      throw new ConvexError({
+        message: errorMessage,
+      });
+    }
+  },
+});
+
+export const autocomplete = action({
+  args: {
+    query: v.string(),
+  },
+  handler: async (_, args) => {
+    const url = `https://api.semanticscholar.org/graph/v1/paper/autocomplete?query=${encodeURIComponent(args.query)}`;
+    try {
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        console.log(response);
+        throw new Error("Network response was not ok");
+      }
+
       const data = await response.json();
-      return data.data; // retorna a lista de papers
+      const matches = data.matches;
+
+      return matches;
+    } catch (error) {
+      console.error("Failed to fetch data:", error);
+      return null;
     }
   },
 });

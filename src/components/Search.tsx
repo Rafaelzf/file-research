@@ -9,20 +9,25 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2, SearchIcon } from "lucide-react";
+
+import { Loader2, LoaderCircle, SearchIcon } from "lucide-react";
 import { Dispatch, SetStateAction, useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 export default function Search({
-  query,
-  setQuery,
+  results = [],
+  setResults,
+  search,
+  getRelevantPapers,
 }: {
-  query?: string;
-  setQuery?: Dispatch<SetStateAction<string>>;
+  results: string[];
+  setResults: Dispatch<SetStateAction<string[]>>;
+  search: (term: string) => Promise<void>;
+  getRelevantPapers(searchTerm: string): Promise<void>;
 }) {
   const [searchTerm, setSearchTerm] = useState("");
-  const [results, setResults] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const formSchema = z.object({
     query: z.string().min(1, "O campo de busca não pode estar vazio").max(200),
@@ -36,28 +41,9 @@ export default function Search({
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
-    form.reset();
+    if (!values.query) return;
+    await getRelevantPapers(values.query);
   }
-
-  const search = (term: string) => {
-    if (!term) {
-      setResults([]);
-      return;
-    }
-    const mockResults = [
-      "Spellbook of Wonders",
-      "Potion of Knowledge",
-      "Enchanted Wand",
-      "Magical Amulet",
-    ];
-
-    const filteredResults = mockResults.filter((result) =>
-      result.toLowerCase().includes(term.toLowerCase())
-    );
-
-    setResults(filteredResults);
-  };
 
   const handleChooseTerm = useCallback(
     (term: string) => {
@@ -71,10 +57,15 @@ export default function Search({
   const handleInputChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       const { value } = event.target;
+
+      setIsLoading(true);
       setSearchTerm(value);
-      search(value);
+
+      search(value).finally(() => {
+        setIsLoading(false);
+      });
     },
-    [searchTerm, search]
+    [searchTerm, search, isLoading, setIsLoading]
   );
 
   return (
@@ -84,7 +75,7 @@ export default function Search({
           onSubmit={form.handleSubmit(onSubmit)}
           className="flex gap-4 w-3/5 mt-3"
         >
-          <div className="w-2/3">
+          <div className="w-2/3 relative">
             <FormField
               control={form.control}
               name="query"
@@ -94,7 +85,7 @@ export default function Search({
                     <Input
                       placeholder="Search"
                       {...field}
-                      className="bg-white"
+                      className="bg-white pr-9"
                       onChange={(e) => {
                         field.onChange(e); // Mantém o comportamento do react-hook-form
                         handleInputChange(e);
@@ -102,6 +93,9 @@ export default function Search({
                       value={searchTerm}
                     />
                   </FormControl>
+                  {isLoading && (
+                    <LoaderCircle className="mr-2 h-4 w-4 animate-spin absolute top-0 right-2" />
+                  )}
                   <FormMessage />
                 </FormItem>
               )}
