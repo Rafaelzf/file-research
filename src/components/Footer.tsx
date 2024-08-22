@@ -3,6 +3,7 @@ import Link from "next/link";
 export function Footer() {
   return (
     <div className="h-20 bg-gray-100 mt-12 flex items-center">
+      <div className="w-4/5 mx-auto">
       <div className="container mx-auto flex justify-between items-center">
         <div>FileDrive</div>
 
@@ -18,6 +19,7 @@ export function Footer() {
         <Link className="text-blue-900 hover:text-blue-500" href="/about">
           About
         </Link>
+      </div>
       </div>
     </div>
   );

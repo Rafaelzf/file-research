@@ -51,7 +51,7 @@ export default function Search({
       form.setValue("query", term); // Atualiza o valor do formulário no campo "query"
       setResults([]);
     },
-    [form]
+    [form, setResults]
   );
 
   const handleInputChange = useCallback(
@@ -65,7 +65,7 @@ export default function Search({
         setIsLoading(false);
       });
     },
-    [searchTerm, search, isLoading, setIsLoading]
+    [search, setIsLoading]
   );
 
   return (

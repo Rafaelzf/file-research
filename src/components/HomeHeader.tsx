@@ -32,19 +32,22 @@ export default function HomeHeader({
   };
 
   return (
-    <div className="container mx-auto flex flex-col justify-center gap-8  min-h-40 ">
-      <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
-        Welcome to Find Research 👋
-      </h1>
-
-      <div>
-        <label>Aqui você pode buscar o tema que deseja</label>
-        <Search
-          search={search}
-          results={results}
-          setResults={setResults}
-          getRelevantPapers={getRelevantPapers}
-        />
+    <div className="w-4/5 mx-auto">
+    <div className="container mx-auto flex flex-col justify-center gap-8  min-h-30 ">
+        <div>
+          <h1 className="scroll-m-20 text-2xl font-extrabold tracking-tight ">
+            Welcome to Find Research 👋
+          </h1>
+          <p>Aqui você pode buscar o tema que deseja</p>
+        </div>
+        <div>
+          <Search
+            search={search}
+            results={results}
+            setResults={setResults}
+            getRelevantPapers={getRelevantPapers}
+          />
+        </div>
       </div>
     </div>
   );

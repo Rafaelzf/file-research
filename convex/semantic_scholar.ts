@@ -53,13 +53,9 @@ export const getRelevantPapers = action({
         });
       }
     } catch (error: unknown) {
-      const errorMessage =
-        error instanceof ConvexError
-          ? (error.data as { message: string }).message
-          : "Your file could not be uploaded, try again later";
-
+     
       throw new ConvexError({
-        message: errorMessage,
+        message: "Erro ao buscar os papers",
       });
     }
   },
