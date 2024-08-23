@@ -15,3 +15,17 @@ export function sortColorsTag() {
   const randomIndex = Math.floor(Math.random() * colors.length);
   return colors[randomIndex];
 }
+
+export function truncateText(text: string, maxLength: number) {
+  if (!text) return;
+  if (text.length <= maxLength) {
+    return text;
+  }
+  return text.slice(0, maxLength - 3) + "...";
+}
+
+export function formatDateToBrazilian(dateString: string) {
+  if (!dateString) return;
+  const [year, month, day] = dateString.split("-");
+  return `${day}/${month}/${year}`;
+}

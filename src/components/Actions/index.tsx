@@ -9,14 +9,14 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Row } from "@tanstack/react-table";
 import { useMutation } from "convex/react";
-import { api } from "../../convex/_generated/api";
-import { Id } from "../../convex/_generated/dataModel";
+import { api } from "../../../convex/_generated/api";
+import { Id } from "../../../convex/_generated/dataModel";
 import { useToast } from "@/components/ui/use-toast";
 import { ConvexError } from "convex/values";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
-import EditCategories from "./EditCategories";
-import DialogModal from "./Modal";
+import EditCategories from "../EditCategories";
+import DialogModal from "../Modal";
 
 export default function Actions({ row }: { row: Row<CategoriesType> }) {
   const [isOpen, setIsOpen] = useState(false);

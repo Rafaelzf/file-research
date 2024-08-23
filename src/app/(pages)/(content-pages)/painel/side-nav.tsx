@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import clsx from "clsx";
+
 import { FileIcon, StarIcon, TrashIcon, Tags, FileUp } from "lucide-react";
 import Link from "next/link";
 import { currentUser } from "@clerk/nextjs/server";

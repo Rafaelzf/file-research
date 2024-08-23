@@ -5,6 +5,7 @@ import { action } from "./_generated/server";
 export const getRelevantPapers = action({
   args: {
     searchTerm: v.any(),
+    page: v.optional(v.number()),
   },
   handler: async (_, args) => {
     const url = new URL(
@@ -33,19 +34,21 @@ export const getRelevantPapers = action({
       "publicationDate",
       "journal",
       "citationStyles",
+      "tldr",
     ].join(",");
 
     url.searchParams.append("query", query);
     url.searchParams.append("limit", "6");
     url.searchParams.append("fields", fields);
-
+    const page = args.page || 1;
+    url.searchParams.append("offset", `${(page - 1) * 6}`);
     try {
       const response = await fetch(url.toString(), {
         method: "GET",
       });
       if (response.ok) {
         const data = await response.json();
-        return data.data; // retorna a lista de papers
+        return data; // retorna a lista de papers
       } else {
         console.error("Failed to fetch data:", response);
         throw new ConvexError({
@@ -53,7 +56,6 @@ export const getRelevantPapers = action({
         });
       }
     } catch (error: unknown) {
-     
       throw new ConvexError({
         message: "Erro ao buscar os papers",
       });

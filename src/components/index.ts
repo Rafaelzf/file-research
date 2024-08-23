@@ -10,6 +10,7 @@ import Datatable from "./Datatable";
 import CreateCategories from "./CreateCategories";
 import EditCategories from "./EditCategories";
 import Actions from "./Actions";
+import Fields from "./Fields/";
 
 export {
   Header,
@@ -24,4 +25,5 @@ export {
   CreateCategories,
   EditCategories,
   Actions,
+  Fields,
 };

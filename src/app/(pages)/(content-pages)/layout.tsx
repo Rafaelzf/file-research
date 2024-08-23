@@ -10,5 +10,5 @@ export default async function RootLayout({
   if (!user) {
     return redirect("/sign-in");
   }
-  return <main>{children}</main>;
+  return <main className="relative ">{children}</main>;
 }

@@ -31,7 +31,7 @@ export default function RootLayout({
             fontSans.variable
           )}
         >
-          <div className="flex flex-col min-h-screen bg-violet-300">
+          <div className="flex flex-col min-h-screen relative bg-gradient-to-t from-indigo-200 via-purple-100 to-gray-100">
             <Header />
             <main className="flex-1">{children}</main>
             <Footer />
