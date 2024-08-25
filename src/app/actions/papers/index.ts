@@ -1,4 +1,4 @@
-import { FIELDS_SEARCH_PAPERS } from "./actions";
+import { FIELDS_SEARCH_PAPERS } from "./constants";
 
 export async function getPapers(query: string, page: string) {
   const newPage = page ? Number(page) : 1;

@@ -1,51 +1,36 @@
-import { getPapers } from "@/app/actions/papers";
-import { SearchResponse } from "./types";
-import { Alert, AlertTitle } from "@/components/ui/alert";
-import { Glasses, Pin, Rocket } from "lucide-react";
+"use client";
+import { Paper } from "@/app/(pages)/(content-pages)/papers/[...query]/types";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from "../ui/card";
 import styles from "./papers.module.css";
 import { truncateText } from "@/lib/utils";
-import { Fields } from "@/components";
-import { Button } from "@/components/ui/button";
+import { Badge } from "../ui/badge";
+import Fields from "../Fields";
+import { Button } from "../ui/button";
+import { Glasses, Pin } from "lucide-react";
 import Link from "next/link";
-import { Badge } from "@/components/ui/badge";
-export default async function Papers({
-  params,
-}: {
-  params: { query: string; page: string };
-}) {
-  const response: SearchResponse = await getPapers(params.query, params.page);
+import { useEffect, useState } from "react";
+export function PapersList({ papers }: { papers: Paper[] }) {
+  const [localPapers, setLocalPapers] = useState<Paper[]>(papers);
 
-  if (!response) return null;
-
-  const { data: papers, total } = response;
+  useEffect(() => {
+    setLocalPapers((prev) => {
+      const newPapers = papers.filter(
+        (paper) => !prev.some((p) => p.paperId === paper.paperId)
+      );
+      return [...prev, ...newPapers];
+    });
+  }, [papers]);
 
   return (
-    <main className="flex flex-col  gap-6 container mx-auto py-10 ">
-      {total !== undefined && (
-        <Alert className="flex justify-between items-center">
-          <AlertTitle className="flex items-center gap-4">
-            <Rocket className="h-4 w-4 text-primary" />
-            <span className="flex items-center gap-3 text-zinc-700">
-              <span className="text-blue-700 font-semibold">
-                {papers?.length ? papers.length : 0}
-              </span>{" "}
-              relevant papers from a total of
-              <span className="text-blue-700 font-semibold">{total}</span>
-            </span>
-          </AlertTitle>
-        </Alert>
-      )}
-
-      {papers &&
-        papers.map((paper: any, index: number) => (
+    <>
+      {localPapers &&
+        localPapers.map((paper: any, index: number) => (
           <Card key={index} className="border border-sky-500">
             <CardHeader>
               <CardTitle className="leading-6">{paper?.title}</CardTitle>
@@ -125,8 +110,6 @@ export default async function Papers({
             </CardFooter>
           </Card>
         ))}
-      {total !== 0 && <Button className="h-10">See more</Button>}
-      {total === 0 && <p>Sua Busca não retornou nada. BIGA</p>}
-    </main>
+    </>
   );
 }

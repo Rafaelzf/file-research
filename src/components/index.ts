@@ -10,6 +10,7 @@ import EditCategories from "./EditCategories";
 import Actions from "./Actions";
 import Fields from "./Fields/";
 import GoToPapers from "./GoToPapers";
+import { PapersList } from "./PapersList";
 
 export {
   Header,
@@ -24,4 +25,5 @@ export {
   Actions,
   Fields,
   GoToPapers,
+  PapersList,
 };
