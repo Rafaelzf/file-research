@@ -1,7 +1,5 @@
 import Header from "./Header";
 import Footer from "./Footer";
-import HomeHeader from "./HomeHeader";
-import Search from "./Search";
 import ResearchCards from "./ResearchCards";
 import SearchAllFiles from "./SearchAllFiles";
 import FileUploader from "./FileUploader";
@@ -11,12 +9,11 @@ import CreateCategories from "./CreateCategories";
 import EditCategories from "./EditCategories";
 import Actions from "./Actions";
 import Fields from "./Fields/";
+import GoToPapers from "./GoToPapers";
 
 export {
   Header,
   Footer,
-  HomeHeader,
-  Search,
   ResearchCards,
   SearchAllFiles,
   FileUploader,
@@ -26,4 +23,5 @@ export {
   EditCategories,
   Actions,
   Fields,
+  GoToPapers,
 };

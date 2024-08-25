@@ -1,5 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 import {
   Form,
   FormControl,
@@ -10,29 +11,20 @@ import {
 import { Input } from "@/components/ui/input";
 import Image from "next/image";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { UseMutateFunction } from "@tanstack/react-query";
 import { Loader2, SearchIcon } from "lucide-react";
-import { Dispatch, SetStateAction, useCallback, useState } from "react";
+import { useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import {
-  Paper,
-  SearchResponse,
-} from "@/app/(pages)/(content-pages)/home/types";
 
-export default function Search({
-  getRelevantPapers,
-  setTerm,
-  setPapers,
-}: {
-  getRelevantPapers: UseMutateFunction<SearchResponse, Error, string, unknown>;
-  setTerm: Dispatch<SetStateAction<string>>;
-  setPapers: Dispatch<SetStateAction<Paper[]>>;
-}) {
+export default function GoToPapers() {
   const [searchTerm, setSearchTerm] = useState("");
+  const router = useRouter();
 
   const formSchema = z.object({
-    query: z.string().min(1, "O campo de busca não pode estar vazio").max(200),
+    query: z
+      .string()
+      .min(1, "lembre-se que o campo de busca não pode estar vazio")
+      .max(200),
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -44,9 +36,7 @@ export default function Search({
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     if (!values.query) return;
-    getRelevantPapers(values.query);
-    setSearchTerm("");
-    setPapers([]);
+    router.push(`/papers/${encodeURIComponent(values.query)}`);
     form.reset();
   }
 
@@ -54,9 +44,8 @@ export default function Search({
     (event: React.ChangeEvent<HTMLInputElement>) => {
       const { value } = event.target;
       setSearchTerm(value);
-      setTerm(value);
     },
-    [setSearchTerm, setTerm]
+    [setSearchTerm]
   );
 
   return (
@@ -72,7 +61,7 @@ export default function Search({
               width={70}
               height={50}
               alt="Picture of the author"
-              className="absolute -left-20 top-5"
+              className="absolute -left-20 top-5 animate-bounce"
             />
             <FormField
               control={form.control}

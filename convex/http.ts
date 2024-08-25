@@ -22,8 +22,6 @@ http.route({
         },
       });
 
-      console.log("Clerk result", result.type);
-
       switch (result.type) {
         case "user.created":
           await ctx.runMutation(internal.users.createUser, {
@@ -62,5 +60,3 @@ http.route({
     }
   }),
 });
-
-export default http;

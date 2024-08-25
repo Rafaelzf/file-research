@@ -1,16 +1,17 @@
-"use client";
 import { GoToPapers } from "@/components";
 
-export default function Home() {
+export default async function Layout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <div>
       <header className="py-10">
         <GoToPapers />
       </header>
 
-      <main className="flex flex-col  gap-6 container mx-auto py-10 ">
-        HOME
-      </main>
+      <>{children}</>
     </div>
   );
 }

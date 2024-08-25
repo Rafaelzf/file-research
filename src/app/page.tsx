@@ -1,3 +1,4 @@
+import { GoToPapers } from "@/components";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -23,13 +24,19 @@ export default function Home() {
             width="200"
             height="200"
             alt="file drive logo"
-            className="inline-block mb-8"
+            className="inline-block mb-2"
           />
 
-          <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
+          <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">
             The easiest way to find and get research
           </h1>
-          <p className="mt-6 text-lg leading-8 text-gray-600">
+
+          <h1 className="text-2xl mb-2 mt-12 font-outline-2 font-extrabold  text-center bg-gradient-to-r from-pink-900 via-violet-500 to-indigo-900 inline-block text-transparent bg-clip-text">
+            Digite sua pesquisa
+          </h1>
+          <GoToPapers />
+
+          {/* <p className="mt-6 text-lg leading-8 text-gray-600">
             Make and account and start managing your search in less than a
             minute.
           </p>
@@ -46,7 +53,7 @@ export default function Home() {
             >
               Learn more <span aria-hidden="true">→</span>
             </a>
-          </div>
+          </div> */}
         </div>
       </div>
       <div

@@ -5,14 +5,15 @@ import {
   TooltipContent,
 } from "@radix-ui/react-tooltip";
 import clsx from "clsx";
+
 export function Fields({ fieldsOfStudy }: { fieldsOfStudy: any[] }) {
   return (
-    <>
+    <li>
       {fieldsOfStudy.length &&
         fieldsOfStudy.map((fields: any, index: number) => {
           if (index > 0) return;
           return (
-            <li key={fields}>
+            <div key={fields} className="flex">
               <TooltipProvider delayDuration={100}>
                 <Tooltip>
                   <TooltipTrigger asChild>
@@ -26,7 +27,7 @@ export function Fields({ fieldsOfStudy }: { fieldsOfStudy: any[] }) {
                     </span>
                   </TooltipTrigger>
                   {fieldsOfStudy.length > 1 && (
-                    <>
+                    <div>
                       <TooltipContent
                         side="top"
                         className="flex gap-3 border border-indigo-500 bg-white ml-12 rounded-lg mb-4 p-3"
@@ -37,14 +38,14 @@ export function Fields({ fieldsOfStudy }: { fieldsOfStudy: any[] }) {
                         })}
                       </TooltipContent>
                       <sup>+{fieldsOfStudy.length - 1}</sup>
-                    </>
+                    </div>
                   )}
                 </Tooltip>
               </TooltipProvider>
-            </li>
+            </div>
           );
         })}
-    </>
+    </li>
   );
 }
 export default Fields;
