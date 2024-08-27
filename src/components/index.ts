@@ -7,7 +7,7 @@ import ComboBox from "./ComboBox";
 import Datatable from "./Datatable";
 import CreateCategories from "./CreateCategories";
 import EditCategories from "./EditCategories";
-import Actions from "./Actions";
+
 import Fields from "./Fields/";
 import GoToPapers from "./GoToPapers";
 import { PapersList } from "./PapersList";
@@ -22,7 +22,6 @@ export {
   Datatable,
   CreateCategories,
   EditCategories,
-  Actions,
   Fields,
   GoToPapers,
   PapersList,

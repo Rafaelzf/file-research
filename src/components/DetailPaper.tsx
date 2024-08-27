@@ -1,0 +1,360 @@
+"use client";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import { Badge } from "@/components/ui/badge";
+import { DetailPaper } from "@/app/(pages)/(content-pages)/(inter-pages)/paper/[...paperId]/types";
+import { formatDateToBrazilian } from "@/lib/utils";
+import Link from "next/link";
+import {
+  BookOpenText,
+  CalendarDays,
+  Scaling,
+  Users,
+  Newspaper,
+  Info,
+  ArrowUpRight,
+  Lock,
+  BookmarkPlus,
+  SquareAsterisk,
+} from "lucide-react";
+export default function DetailPaperPage({
+  detailPaper,
+}: {
+  detailPaper: DetailPaper;
+}) {
+  console.log(detailPaper);
+  return (
+    <>
+      <Card className="flex flex-wrap md:flex-nowrap justify-between gap-3 ">
+        <div className="md:w-8/12 w-full">
+          <CardHeader>
+            <CardTitle className="scroll-m-20 border-slate-300 border-b pb-2 text-2xl font-semibold tracking-tight">
+              {detailPaper.title}
+            </CardTitle>
+
+            <div className="flex justify-between items-center gap-4 flex-wrap">
+              {detailPaper.authors.length > 0 && (
+                <div className="flex items-center gap-2">
+                  <Users />
+                  <ul className="flex items-center gap-2 flex-wrap">
+                    {detailPaper.authors.map((author, index) => {
+                      return (
+                        <li
+                          key={author.authorId}
+                          className="text-sm text-muted-foreground border-slate-300 border-r last:border-none pr-2 flex-wrap"
+                        >
+                          {author?.url ? (
+                            <Link
+                              href={author?.url}
+                              target="_blank"
+                              className="flex items-center gap-1"
+                            >
+                              <span className="whitespace-nowrap">
+                                {" "}
+                                {author.name}
+                              </span>
+                              <ArrowUpRight height={16} width={16} />
+                            </Link>
+                          ) : (
+                            <span className="whitespace-nowrap">
+                              {" "}
+                              {author.name}
+                            </span>
+                          )}
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
+              )}
+              <div>
+                {detailPaper?.venue && (
+                  <>
+                    {detailPaper.publicationVenue?.url ? (
+                      <Link
+                        href={detailPaper?.publicationVenue?.url}
+                        target="_blank"
+                        className="italic text-sm flex items-center gap-2 text-muted-foreground"
+                      >
+                        <BookOpenText />
+                        {detailPaper.venue}
+                      </Link>
+                    ) : (
+                      <span className="italic text-sm flex items-center gap-2 text-muted-foreground">
+                        <BookOpenText />
+                        {detailPaper.venue}
+                      </span>
+                    )}
+                  </>
+                )}
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div>
+              <h2 className="font-semibold">Abstract</h2>
+              <p className="leading-7">{detailPaper.abstract}</p>
+            </div>
+          </CardContent>
+          <CardFooter>
+            <ul className="flex flex-wrap md:flex-nowrap  items-center gap-4">
+              <li className="text-sm text-muted-foreground border-slate-300 border-r pr-2 flex gap-2 items-center">
+                <CalendarDays />{" "}
+                {formatDateToBrazilian(detailPaper?.publicationDate)}
+              </li>
+              {detailPaper?.publicationVenue?.type && (
+                <li className="text-sm text-muted-foreground border-slate-300 border-r pr-2 flex gap-2 items-center">
+                  <Newspaper />
+                  <span className="font-semibold">
+                    {detailPaper?.publicationVenue?.type}
+                  </span>
+                </li>
+              )}
+
+              {detailPaper?.journal && detailPaper.journal?.name && (
+                <li className="border-slate-300 border-r pr-2 text-muted-foreground">
+                  <HoverCard>
+                    <HoverCardTrigger className="text-sm flex items-center gap-2">
+                      <Info /> Jornal info
+                    </HoverCardTrigger>
+                    <HoverCardContent>
+                      <ul className="text-sm flex flex-col gap-3">
+                        <li>
+                          <strong>Jornal name</strong>:{" "}
+                          {detailPaper?.journal?.name}
+                        </li>
+                        {detailPaper.journal?.pages && (
+                          <li>
+                            <strong>Pages</strong>: {detailPaper.journal?.pages}
+                          </li>
+                        )}
+                        {detailPaper.journal?.volume && (
+                          <li>
+                            <strong>Volume</strong>:{" "}
+                            {detailPaper.journal?.volume}
+                          </li>
+                        )}
+                      </ul>
+                    </HoverCardContent>
+                  </HoverCard>
+                </li>
+              )}
+              <li>
+                {detailPaper?.openAccessPdf ? (
+                  <span className="text-sm  border-slate-300 ">
+                    <Link
+                      href={detailPaper?.openAccessPdf?.url}
+                      target="_blank"
+                      className="flex items-center gap-2"
+                    >
+                      <Scaling />
+                      PDF
+                      {detailPaper?.openAccessPdf?.status === "GOLD" && (
+                        <sup className="text-yellow-600">Gold</sup>
+                      )}
+                      {detailPaper?.openAccessPdf?.status === "GREEN" && (
+                        <sup className="text-green-700">Green</sup>
+                      )}
+                      {detailPaper?.openAccessPdf?.status === "HYBRID" && (
+                        <sup className="text-blue-700">Hybid</sup>
+                      )}
+                    </Link>
+                  </span>
+                ) : (
+                  <span className="text-sm  border-slate-300 flex items-center gap-2 ">
+                    <Lock />
+                    <span>PDF</span>
+                  </span>
+                )}
+              </li>
+            </ul>
+          </CardFooter>
+        </div>
+        <aside className="p-6 border-l border-slate-300 md:w-4/12 w-full  flex flex-col justify-between">
+          <div>
+            <ul className="flex justify-end items-center gap-4 mb-20">
+              <li className="flex items-center gap-2 cursor-pointer text-lg">
+                <BookmarkPlus /> <span>Favorite</span>
+              </li>
+            </ul>
+            <ul className="flex flex-col gap-4">
+              {detailPaper?.influentialCitationCount > 0 && (
+                <li>
+                  <Badge
+                    variant="outline"
+                    className="flex items-center gap-1 justify-between"
+                  >
+                    <div className="flex items-center gap-1 text-green-700">
+                      <span>Influential citations</span>{" "}
+                      <HoverCard>
+                        <HoverCardTrigger>
+                          <Info height={12} width={12} />
+                        </HoverCardTrigger>
+                        <HoverCardContent>
+                          The number of citations that were considered
+                          influential. These citations are generally considered
+                          to be more impactful or relevant in the field of
+                          study.
+                        </HoverCardContent>
+                      </HoverCard>
+                    </div>
+                    <div>
+                      <Badge className="flex items-center bg-green-700">
+                        {detailPaper?.influentialCitationCount}
+                      </Badge>
+                    </div>
+                  </Badge>
+                </li>
+              )}
+
+              {detailPaper?.citationCount > 0 && (
+                <li>
+                  <Badge
+                    variant="outline"
+                    className="flex items-center gap-1 justify-between"
+                  >
+                    <div className="flex items-center gap-1 text-sky-700">
+                      <span>Citation Count</span>{" "}
+                      <HoverCard>
+                        <HoverCardTrigger>
+                          <Info height={12} width={12} />
+                        </HoverCardTrigger>
+                        <HoverCardContent>
+                          The total number of citations this paper has received.
+                        </HoverCardContent>
+                      </HoverCard>
+                    </div>
+                    <div>
+                      <Badge className="flex items-center bg-sky-700">
+                        {detailPaper?.citationCount}
+                      </Badge>
+                    </div>
+                  </Badge>
+                </li>
+              )}
+
+              {detailPaper?.referenceCount > 0 && (
+                <li>
+                  <Badge
+                    variant="outline"
+                    className="flex items-center gap-1 justify-between"
+                  >
+                    <div className="flex items-center gap-1 text-primary">
+                      <span>Reference count</span>{" "}
+                      <HoverCard>
+                        <HoverCardTrigger>
+                          <Info height={12} width={12} />
+                        </HoverCardTrigger>
+                        <HoverCardContent>
+                          The total number of papers referenced by this paper.
+                        </HoverCardContent>
+                      </HoverCard>
+                    </div>
+                    <div>
+                      <Badge className="flex items-center ">
+                        {detailPaper?.referenceCount}
+                      </Badge>
+                    </div>
+                  </Badge>
+                </li>
+              )}
+            </ul>
+
+            <ul className="mt-10">
+              <Accordion type="multiple">
+                {detailPaper?.citationStyles && (
+                  <AccordionItem value="item-1">
+                    <AccordionTrigger>Citation style</AccordionTrigger>
+                    <AccordionContent>
+                      <span className="font-semibold">Bibtex:</span>
+                      <span className="block relative shadow-inner bg-muted p-5 rounded-lg font-mono text-xs ">
+                        {detailPaper?.citationStyles.bibtex}
+                      </span>
+                    </AccordionContent>
+                  </AccordionItem>
+                )}
+                {detailPaper?.s2FieldsOfStudy && (
+                  <AccordionItem value="item-2">
+                    <AccordionTrigger>Fields</AccordionTrigger>
+                    <AccordionContent>
+                      {detailPaper?.s2FieldsOfStudy?.map((camp, index) => (
+                        <span key={index} className="  font-mono text-xs mr-2">
+                          {camp?.category},
+                        </span>
+                      ))}
+                    </AccordionContent>
+                  </AccordionItem>
+                )}
+
+                {detailPaper?.externalIds && (
+                  <AccordionItem value="item-3">
+                    <AccordionTrigger>External Ids</AccordionTrigger>
+                    <AccordionContent>
+                      <ul className="text-xs flex flex-col gap-3">
+                        {detailPaper?.externalIds?.DBLP && (
+                          <li>
+                            <strong className="font-semibold">DBLP</strong>:{" "}
+                            {detailPaper?.externalIds?.DBLP}
+                          </li>
+                        )}
+                        {detailPaper?.externalIds?.DOI && (
+                          <li>
+                            <strong className="font-semibold">DOI</strong>:{" "}
+                            {detailPaper?.externalIds?.DOI}
+                          </li>
+                        )}
+                        {detailPaper?.externalIds?.MAG && (
+                          <li>
+                            <strong className="font-semibold">MAG</strong>:{" "}
+                            {detailPaper?.externalIds?.MAG}
+                          </li>
+                        )}
+                        {detailPaper?.externalIds?.PubMedCentral && (
+                          <li>
+                            <strong className="font-semibold">
+                              PubMedCentral
+                            </strong>
+                            : {detailPaper?.externalIds?.PubMedCentral}
+                          </li>
+                        )}
+                      </ul>
+                    </AccordionContent>
+                  </AccordionItem>
+                )}
+              </Accordion>
+            </ul>
+          </div>
+          <ul>
+            <li className="flex item-center gap-2 text-xs text-muted-foreground">
+              <span>See in:</span>
+              <Link
+                href={detailPaper?.url}
+                target="_blank"
+                className="flex items-center gap-1"
+              >
+                <span>Semantic Schoolar</span>{" "}
+                <ArrowUpRight height={16} width={16} />
+              </Link>
+            </li>
+          </ul>
+        </aside>
+      </Card>
+    </>
+  );
+}

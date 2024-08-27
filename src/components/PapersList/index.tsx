@@ -1,5 +1,5 @@
 "use client";
-import { Paper } from "@/app/(pages)/(content-pages)/papers/[...query]/types";
+
 import {
   Card,
   CardContent,
@@ -15,6 +15,7 @@ import { Button } from "../ui/button";
 import { Glasses, Pin } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { Paper } from "@/app/(pages)/(content-pages)/(inter-pages)/papers/[...query]/types";
 export function PapersList({ papers }: { papers: Paper[] }) {
   const [localPapers, setLocalPapers] = useState<Paper[]>(papers);
 
@@ -30,7 +31,7 @@ export function PapersList({ papers }: { papers: Paper[] }) {
   return (
     <>
       {localPapers &&
-        localPapers.map((paper: any, index: number) => (
+        localPapers.map((paper: Paper, index: number) => (
           <Card key={index} className="border border-sky-500">
             <CardHeader>
               <CardTitle className="leading-6">{paper?.title}</CardTitle>
@@ -92,7 +93,7 @@ export function PapersList({ papers }: { papers: Paper[] }) {
                 </li>
                 <li>
                   <Link
-                    href={`/paper/${paper?.id}`}
+                    href={`/paper/${paper?.paperId}`}
                     className="flex items-center justify-between gap-1 p-0 px-3 border-0 bg-transparent shadow-transparent hover:bg-transparent hover: group"
                   >
                     <Glasses
@@ -101,9 +102,7 @@ export function PapersList({ papers }: { papers: Paper[] }) {
                       stroke="currentColor"
                       strokeWidth={2}
                     />
-                    <span className="text-primary text-base">
-                      See {paper?.id}
-                    </span>
+                    <span className="text-primary text-base">See</span>
                   </Link>
                 </li>
               </ul>

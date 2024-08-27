@@ -10,6 +10,10 @@ export interface Paper {
   url: string;
   title: string;
   abstract: string;
+  tldr: {
+    text: string;
+    source: string;
+  };
   venue: string;
   publicationVenue: {
     id: string;
