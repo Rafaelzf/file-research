@@ -31,18 +31,16 @@ import {
   ArrowUpRight,
   Lock,
   BookmarkPlus,
-  SquareAsterisk,
 } from "lucide-react";
 export default function DetailPaperPage({
   detailPaper,
 }: {
   detailPaper: DetailPaper;
 }) {
-  console.log(detailPaper);
   return (
     <>
       <Card className="flex flex-wrap md:flex-nowrap justify-between gap-3 ">
-        <div className="md:w-8/12 w-full">
+        <div className="md:w-8/12 w-full flex flex-col">
           <CardHeader>
             <CardTitle className="scroll-m-20 border-slate-300 border-b pb-2 text-2xl font-semibold tracking-tight">
               {detailPaper.title}
@@ -106,7 +104,7 @@ export default function DetailPaperPage({
               </div>
             </div>
           </CardHeader>
-          <CardContent>
+          <CardContent className="flex-1">
             <div>
               <h2 className="font-semibold">Abstract</h2>
               <p className="leading-7">{detailPaper.abstract}</p>
@@ -188,7 +186,7 @@ export default function DetailPaperPage({
         </div>
         <aside className="p-6 border-l border-slate-300 md:w-4/12 w-full  flex flex-col justify-between">
           <div>
-            <ul className="flex justify-end items-center gap-4 mb-20">
+            <ul className="flex justify-end items-center gap-4 mb-10">
               <li className="flex items-center gap-2 cursor-pointer text-lg">
                 <BookmarkPlus /> <span>Favorite</span>
               </li>
@@ -198,7 +196,7 @@ export default function DetailPaperPage({
                 <li>
                   <Badge
                     variant="outline"
-                    className="flex items-center gap-1 justify-between"
+                    className="flex items-center gap-1 justify-between py-2 px-3"
                   >
                     <div className="flex items-center gap-1 text-green-700">
                       <span>Influential citations</span>{" "}
@@ -227,7 +225,7 @@ export default function DetailPaperPage({
                 <li>
                   <Badge
                     variant="outline"
-                    className="flex items-center gap-1 justify-between"
+                    className="flex items-center gap-1 justify-between py-2 px-3"
                   >
                     <div className="flex items-center gap-1 text-sky-700">
                       <span>Citation Count</span>{" "}
@@ -253,7 +251,7 @@ export default function DetailPaperPage({
                 <li>
                   <Badge
                     variant="outline"
-                    className="flex items-center gap-1 justify-between"
+                    className="flex items-center gap-1 justify-between py-2 px-3"
                   >
                     <div className="flex items-center gap-1 text-primary">
                       <span>Reference count</span>{" "}
@@ -280,7 +278,9 @@ export default function DetailPaperPage({
               <Accordion type="multiple">
                 {detailPaper?.citationStyles && (
                   <AccordionItem value="item-1">
-                    <AccordionTrigger>Citation style</AccordionTrigger>
+                    <AccordionTrigger className="p-1.5">
+                      Citation style
+                    </AccordionTrigger>
                     <AccordionContent>
                       <span className="font-semibold">Bibtex:</span>
                       <span className="block relative shadow-inner bg-muted p-5 rounded-lg font-mono text-xs ">
@@ -291,7 +291,9 @@ export default function DetailPaperPage({
                 )}
                 {detailPaper?.s2FieldsOfStudy && (
                   <AccordionItem value="item-2">
-                    <AccordionTrigger>Fields</AccordionTrigger>
+                    <AccordionTrigger className="p-1.5">
+                      Fields
+                    </AccordionTrigger>
                     <AccordionContent>
                       {detailPaper?.s2FieldsOfStudy?.map((camp, index) => (
                         <span key={index} className="  font-mono text-xs mr-2">
@@ -304,7 +306,9 @@ export default function DetailPaperPage({
 
                 {detailPaper?.externalIds && (
                   <AccordionItem value="item-3">
-                    <AccordionTrigger>External Ids</AccordionTrigger>
+                    <AccordionTrigger className="p-1.5">
+                      External Ids
+                    </AccordionTrigger>
                     <AccordionContent>
                       <ul className="text-xs flex flex-col gap-3">
                         {detailPaper?.externalIds?.DBLP && (
@@ -340,7 +344,7 @@ export default function DetailPaperPage({
               </Accordion>
             </ul>
           </div>
-          <ul>
+          <ul className="mt-10">
             <li className="flex item-center gap-2 text-xs text-muted-foreground">
               <span>See in:</span>
               <Link

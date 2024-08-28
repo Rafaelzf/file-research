@@ -1,4 +1,9 @@
-import { FIELDS_DETAILS_PAPER, FIELDS_SEARCH_PAPERS } from "./constants";
+import {
+  FIELDS_DETAILS_PAPER,
+  FIELDS_DETAILS_REFERENCES,
+  FIELDS_SEARCH_PAPERS,
+  FIELDS_DETAILS_AUTHORS,
+} from "./constants";
 
 export async function getPapers(query: string, page: string) {
   const newPage = page ? Number(page) : 1;
@@ -6,7 +11,7 @@ export async function getPapers(query: string, page: string) {
   const fields = [...FIELDS_SEARCH_PAPERS].join(",");
 
   const semanticscholarURL = new URL(
-    "https://api.semanticscholar.org/graph/v1/paper/search"
+    `https://api.semanticscholar.org/graph/v1/paper/search`
   );
 
   semanticscholarURL.searchParams.append("query", newQuery);
@@ -17,6 +22,7 @@ export async function getPapers(query: string, page: string) {
   try {
     const response = await fetch(semanticscholarURL.toString(), {
       method: "GET",
+      headers: { "x-api-key": "zeRLQ1ESsB2Pqx17ApzwN8MKXJklPcObaLSWPtP6" },
     });
 
     if (response.ok) {
@@ -37,6 +43,7 @@ export async function getDetailsPaper(paperId: string) {
       `https://api.semanticscholar.org/graph/v1/paper/${paperId}?fields=${FIELDS_DETAILS_PAPER}`,
       {
         method: "GET",
+        headers: { "x-api-key": "zeRLQ1ESsB2Pqx17ApzwN8MKXJklPcObaLSWPtP6" },
       }
     );
 
@@ -47,6 +54,84 @@ export async function getDetailsPaper(paperId: string) {
       throw new Error("Failed to fetch papers");
     }
   } catch (error: any) {
+    throw new Error("Failed to fetch papers");
+  }
+}
+
+export async function getDetailsReferences(paperId: string, page?: string) {
+  const newPage = page ? Number(page) : 1;
+  const newPaperId = decodeURIComponent(paperId);
+  const offset = (newPage - 1) * 6;
+  const limit = 6;
+
+  const apiUrl = `https://api.semanticscholar.org/graph/v1/paper/${newPaperId}/references?fields=${FIELDS_DETAILS_REFERENCES}&limit=${limit}&offset=${offset}&page=${newPage}`;
+
+  try {
+    const response = await fetch(apiUrl, {
+      method: "GET",
+      headers: { "x-api-key": "zeRLQ1ESsB2Pqx17ApzwN8MKXJklPcObaLSWPtP6" },
+    });
+
+    if (response.ok) {
+      return response.json();
+    } else {
+      console.error("Failed to fetch data:", response);
+      throw new Error("Failed to fetch papers");
+    }
+  } catch (error) {
+    console.error("Failed to fetch data:", error);
+    throw new Error("Failed to fetch papers");
+  }
+}
+
+export async function getDetailsCitations(paperId: string, page?: string) {
+  const newPage = page ? Number(page) : 1;
+  const newPaperId = decodeURIComponent(paperId);
+  const offset = (newPage - 1) * 6;
+  const limit = 6;
+
+  const apiUrl = `https://api.semanticscholar.org/graph/v1/paper/${newPaperId}/citations?fields=${FIELDS_DETAILS_REFERENCES}&limit=${limit}&offset=${offset}&page=${newPage}`;
+
+  try {
+    const response = await fetch(apiUrl, {
+      method: "GET",
+      headers: { "x-api-key": "zeRLQ1ESsB2Pqx17ApzwN8MKXJklPcObaLSWPtP6" },
+    });
+
+    if (response.ok) {
+      return response.json();
+    } else {
+      console.error("Failed to fetch data:", response);
+      throw new Error("Failed to fetch papers");
+    }
+  } catch (error) {
+    console.error("Failed to fetch data:", error);
+    throw new Error("Failed to fetch papers");
+  }
+}
+
+export async function getDetailsAuthors(paperId: string, page?: string) {
+  const newPage = page ? Number(page) : 1;
+  const newPaperId = decodeURIComponent(paperId);
+  const offset = (newPage - 1) * 6;
+  const limit = 6;
+
+  const apiUrl = `https://api.semanticscholar.org/graph/v1/paper/${newPaperId}/authors?fields=${FIELDS_DETAILS_AUTHORS}&limit=${limit}&offset=${offset}&page=${newPage}`;
+
+  try {
+    const response = await fetch(apiUrl, {
+      method: "GET",
+      headers: { "x-api-key": "zeRLQ1ESsB2Pqx17ApzwN8MKXJklPcObaLSWPtP6" },
+    });
+
+    if (response.ok) {
+      return response.json();
+    } else {
+      console.error("Failed to fetch data:", response);
+      throw new Error("Failed to fetch papers");
+    }
+  } catch (error) {
+    console.error("Failed to fetch data:", error);
     throw new Error("Failed to fetch papers");
   }
 }

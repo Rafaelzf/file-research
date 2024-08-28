@@ -11,6 +11,10 @@ import EditCategories from "./EditCategories";
 import Fields from "./Fields/";
 import GoToPapers from "./GoToPapers";
 import { PapersList } from "./PapersList";
+import DetailPaperPage from "./DetailsPaper";
+import DetailsCitations from "./DetailsCitations";
+import DetailsReferences from "./DetailsReferences";
+import DetailsAuthors from "./DetailsAuthors";
 
 export {
   Header,
@@ -25,4 +29,8 @@ export {
   Fields,
   GoToPapers,
   PapersList,
+  DetailPaperPage,
+  DetailsCitations,
+  DetailsReferences,
+  DetailsAuthors,
 };
