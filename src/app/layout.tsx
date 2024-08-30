@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import { Inter as FontSans } from "next/font/google";
+import { currentUser } from "@clerk/nextjs/server";
 import { cn } from "@/lib/utils";
 import "./globals.css";
 
 import { ConvexClientProvider } from "./ConvexClientProvider";
 import { Toaster } from "@/components/ui/toaster";
 import Header from "@/components/Header";
-import { Footer } from "@/components";
+import { Footer, Sidebar } from "@/components";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -17,11 +18,12 @@ const fontSans = FontSans({
   variable: "--font-sans",
 });
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const user = await currentUser();
   return (
     <html lang="pt-br" suppressHydrationWarning>
       <ConvexClientProvider>
@@ -31,10 +33,15 @@ export default function RootLayout({
             fontSans.variable
           )}
         >
-          <div className="flex flex-col min-h-screen relative bg-gradient-to-t from-indigo-200 via-purple-100 to-gray-100">
+          <div className="relative flex flex-col min-h-screen bg-gradient-to-t from-indigo-200 via-purple-100 to-gray-100">
             <Header />
-            <main className="flex-1">{children}</main>
-            <Footer />
+
+            <main className="flex-1 flex relative">
+              {user && <Sidebar />}
+
+              <div className="w-9/12 mx-auto">{children}</div>
+            </main>
+            {/* <Footer /> */}
           </div>
           <Toaster />
         </body>

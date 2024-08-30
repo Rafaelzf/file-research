@@ -116,7 +116,7 @@ export default function CreateCategories({ onSuccess }: CreateCategoriesProps) {
                 control={form.control}
                 name="description"
                 render={({ field }) => (
-                  <FormItem className="w-3/5">
+                  <FormItem className="w-9/12">
                     <FormLabel>Curta descrição</FormLabel>
                     <FormControl>
                       <Input placeholder="Curta descrição" {...field} />

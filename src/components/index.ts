@@ -15,6 +15,8 @@ import DetailPaperPage from "./DetailsPaper";
 import DetailsCitations from "./DetailsCitations";
 import DetailsReferences from "./DetailsReferences";
 import DetailsAuthors from "./DetailsAuthors";
+import Sidebar from "./Sidebar";
+import PaperActions from "./PaperActions";
 
 export {
   Header,
@@ -33,4 +35,6 @@ export {
   DetailsCitations,
   DetailsReferences,
   DetailsAuthors,
+  Sidebar,
+  PaperActions,
 };

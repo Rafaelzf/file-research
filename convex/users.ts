@@ -1,5 +1,29 @@
 import { ConvexError, v } from "convex/values";
-import { internalMutation } from "./_generated/server";
+import {
+  MutationCtx,
+  QueryCtx,
+  internalMutation,
+  mutation,
+  query,
+} from "./_generated/server";
+
+export async function getUser(
+  ctx: QueryCtx | MutationCtx,
+  tokenIdentifier: string
+) {
+  const user = await ctx.db
+    .query("users")
+    .withIndex("by_tokenIdentifier", (q) =>
+      q.eq("tokenIdentifier", tokenIdentifier)
+    )
+    .first();
+
+  if (!user) {
+    throw new ConvexError("expected user to be defined");
+  }
+
+  return user;
+}
 
 export const createUser = internalMutation({
   args: {
@@ -9,6 +33,11 @@ export const createUser = internalMutation({
     image: v.string(),
     email: v.string(),
     role: v.string(),
+    favorites: v.optional(v.array(v.string())),
+    seeLater: v.optional(v.array(v.string())),
+    library: v.optional(
+      v.object({ name: v.string(), papers: v.array(v.string()) })
+    ),
   },
   async handler(ctx, args) {
     await ctx.db.insert("users", {
@@ -18,6 +47,9 @@ export const createUser = internalMutation({
       role: args.role,
       tokenIdentifier: args.tokenIdentifier,
       image: args.image,
+      favorites: args.favorites || [],
+      seeLater: args.seeLater || [],
+      library: args.library,
     });
   },
 });
@@ -30,6 +62,11 @@ export const updateUser = internalMutation({
     image: v.string(),
     email: v.string(),
     role: v.string(),
+    favorites: v.optional(v.array(v.string())),
+    seeLater: v.optional(v.array(v.string())),
+    library: v.optional(
+      v.object({ name: v.string(), papers: v.array(v.string()) })
+    ),
   },
   async handler(ctx, args) {
     const user = await ctx.db
@@ -49,6 +86,90 @@ export const updateUser = internalMutation({
       image: args.image,
       email: args.email,
       role: args.role,
+      favorites: args.favorites || [],
+      seeLater: args.seeLater || [],
+      library: args.library || undefined,
+    });
+  },
+});
+
+export const getInfoUser = query({
+  args: { tokenIdentifier: v.string() },
+  handler: async (ctx, args) => {
+    const user = await ctx.db
+      .query("users")
+      .withIndex("by_tokenIdentifier", (q) =>
+        q.eq("tokenIdentifier", args.tokenIdentifier)
+      )
+      .first();
+
+    if (!user) {
+      throw new ConvexError("expected user to be defined");
+    }
+
+    return user;
+  },
+});
+
+export const updateDataUser = mutation({
+  args: {
+    tokenIdentifier: v.string(),
+    favorites: v.optional(v.string()),
+    seeLater: v.optional(v.array(v.string())),
+    library: v.optional(
+      v.object({ name: v.string(), papers: v.array(v.string()) })
+    ),
+  },
+  async handler(ctx, args) {
+    const user = await ctx.db
+      .query("users")
+      .withIndex("by_tokenIdentifier", (q) =>
+        q.eq("tokenIdentifier", args.tokenIdentifier)
+      )
+      .first();
+
+    if (!user) {
+      throw new ConvexError("no user with this token found");
+    }
+    let newFavorites = user.favorites ? user.favorites : [];
+    let newSeeLater = user.seeLater ? user.seeLater : [];
+
+    if (args.favorites) {
+      newFavorites.push(args.favorites);
+    }
+
+    if (args.seeLater) {
+      newSeeLater = args.seeLater;
+    }
+
+    await ctx.db.patch(user._id, {
+      favorites: newFavorites,
+      seeLater: newSeeLater,
+      library: args.library || undefined,
+    });
+  },
+});
+
+export const unfavoritePaper = mutation({
+  args: {
+    tokenIdentifier: v.string(),
+    paperId: v.string(),
+  },
+  async handler(ctx, args) {
+    const user = await ctx.db
+      .query("users")
+      .withIndex("by_tokenIdentifier", (q) =>
+        q.eq("tokenIdentifier", args.tokenIdentifier)
+      )
+      .first();
+
+    if (!user) {
+      throw new ConvexError("no user with this token found");
+    }
+    const newFavorites = user.favorites?.filter((f) => f !== args.paperId);
+
+    await ctx.db.patch(user._id, {
+      favorites: newFavorites,
     });
   },
 });

@@ -97,7 +97,7 @@ export default function EditCategories({
               control={form.control}
               name="name"
               render={({ field }) => (
-                <FormItem className="w-3/5">
+                <FormItem className="w-9/12">
                   <FormLabel>Nome da categoria</FormLabel>
                   <FormControl>
                     <Input placeholder="Nome da categoria" {...field} />

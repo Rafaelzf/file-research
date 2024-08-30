@@ -1,6 +1,5 @@
 import { GoToPapers } from "@/components";
 import Image from "next/image";
-import Link from "next/link";
 
 export default function Home() {
   return (
@@ -35,25 +34,6 @@ export default function Home() {
             Digite sua pesquisa
           </h1>
           <GoToPapers />
-
-          {/* <p className="mt-6 text-lg leading-8 text-gray-600">
-            Make and account and start managing your search in less than a
-            minute.
-          </p>
-          <div className="mt-10 flex items-center justify-center gap-x-6">
-            <Link
-              href="/home"
-              className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-            >
-              Get started
-            </Link>
-            <a
-              href="#"
-              className="text-sm font-semibold leading-6 text-gray-900"
-            >
-              Learn more <span aria-hidden="true">→</span>
-            </a>
-          </div> */}
         </div>
       </div>
       <div

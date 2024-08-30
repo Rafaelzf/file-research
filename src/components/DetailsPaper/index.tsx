@@ -31,16 +31,38 @@ import {
   ArrowUpRight,
   Lock,
   BookmarkPlus,
+  BookmarkMinus,
 } from "lucide-react";
+import { useUser } from "@clerk/nextjs";
+import { useMutation, useQuery } from "convex/react";
+import { api } from "../../../convex/_generated/api";
 export default function DetailPaperPage({
   detailPaper,
 }: {
   detailPaper: DetailPaper;
 }) {
+  const { user } = useUser();
+
+  const updateDataUser: any = useMutation(api.users.updateDataUser);
+  const unfavorite: any = useMutation(api.users.unfavoritePaper);
+
+  const infoUser = useQuery(api.users.getInfoUser, {
+    tokenIdentifier: user?.id || "",
+  });
+
+  const handleSaveFavorites = async (paperId: string) => {
+    if (!paperId || !user?.id) return;
+    updateDataUser({ tokenIdentifier: user?.id, favorites: paperId });
+  };
+
+  const handleUnSaveFavorites = async (paperId: string) => {
+    if (!paperId || !user?.id) return;
+    unfavorite({ tokenIdentifier: user?.id, paperId: paperId });
+  };
   return (
     <>
       <Card className="flex flex-wrap md:flex-nowrap justify-between gap-3 ">
-        <div className="md:w-8/12 w-full flex flex-col">
+        <div className="md:w-9/12 w-full flex flex-col">
           <CardHeader>
             <CardTitle className="scroll-m-20 border-slate-300 border-b pb-2 text-2xl font-semibold tracking-tight">
               {detailPaper.title}
@@ -187,9 +209,21 @@ export default function DetailPaperPage({
         <aside className="p-6 border-l border-slate-300 md:w-4/12 w-full  flex flex-col justify-between">
           <div>
             <ul className="flex justify-end items-center gap-4 mb-10">
-              <li className="flex items-center gap-2 cursor-pointer text-lg">
-                <BookmarkPlus /> <span>Favorite</span>
-              </li>
+              {infoUser?.favorites?.includes(detailPaper.paperId) ? (
+                <li
+                  className="flex items-center gap-2 cursor-pointer text-lg"
+                  onClick={() => handleUnSaveFavorites(detailPaper.paperId)}
+                >
+                  <BookmarkMinus /> <span>Unfavorite</span>
+                </li>
+              ) : (
+                <li
+                  className="flex items-center gap-2 cursor-pointer text-lg"
+                  onClick={() => handleSaveFavorites(detailPaper.paperId)}
+                >
+                  <BookmarkPlus /> <span>Favorite</span>
+                </li>
+              )}
             </ul>
             <ul className="flex flex-col gap-4">
               {detailPaper?.influentialCitationCount > 0 && (

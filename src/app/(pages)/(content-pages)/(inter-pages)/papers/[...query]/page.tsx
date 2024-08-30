@@ -1,5 +1,5 @@
 import { getPapers } from "@/app/actions/papers";
-import { SearchResponse } from "./types";
+import { Paper, SearchResponse } from "./types";
 import { Alert, AlertTitle } from "@/components/ui/alert";
 import { Rocket } from "lucide-react";
 
@@ -29,6 +29,19 @@ export default async function Papers({
 
   const { data: papers, total } = response;
 
+  function totalPageof() {
+    if (!papers) return 0;
+
+    if (papers.length) {
+      if (!page) {
+        return papers.length;
+      }
+      return papers.length * Number(page);
+    } else {
+      return 0;
+    }
+  }
+
   return (
     <main className="flex flex-col  gap-6 container mx-auto py-10 ">
       {total !== undefined && (
@@ -37,14 +50,14 @@ export default async function Papers({
             <Rocket className="h-4 w-4 text-primary" />
             <span className="flex items-center gap-3 text-zinc-700">
               <span className="text-blue-700 font-semibold">
-                {papers?.length ? papers.length : 0}
+                {totalPageof()}
               </span>{" "}
               relevant papers from a total of
               <span className="text-blue-700 font-semibold">{total}</span>
             </span>
           </AlertTitle>
         </Alert>
-      )}
+      )}   
 
       {papers && <PapersList papers={papers} />}
 

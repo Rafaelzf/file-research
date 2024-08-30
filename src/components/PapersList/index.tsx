@@ -1,5 +1,5 @@
 "use client";
-
+import { useUser } from "@clerk/clerk-react";
 import {
   Card,
   CardContent,
@@ -11,11 +11,11 @@ import styles from "./papers.module.css";
 import { truncateText } from "@/lib/utils";
 import { Badge } from "../ui/badge";
 import Fields from "../Fields";
-import { Button } from "../ui/button";
-import { Glasses, Pin } from "lucide-react";
-import Link from "next/link";
+
 import { useEffect, useState } from "react";
 import { Paper } from "@/app/(pages)/(content-pages)/(inter-pages)/papers/[...query]/types";
+import PaperActions from "../PaperActions";
+
 export function PapersList({ papers }: { papers: Paper[] }) {
   const [localPapers, setLocalPapers] = useState<Paper[]>(papers);
 
@@ -35,8 +35,8 @@ export function PapersList({ papers }: { papers: Paper[] }) {
           <Card key={index} className="border border-sky-500">
             <CardHeader>
               <CardTitle className="leading-6">{paper?.title}</CardTitle>
-              {paper?.authors?.length && (
-                <ul className={`flex text-xs ${styles.authorslist}`}>
+              {paper?.authors?.length > 0 && (
+                <ul className={`flex text-xs ${styles.authorslist} flex-wrap`}>
                   {paper?.authors.map((author: any, index: number) => {
                     if (index === 6)
                       return (
@@ -57,9 +57,9 @@ export function PapersList({ papers }: { papers: Paper[] }) {
                 )}
               </p>
             </CardContent>
-            <CardFooter className="p-4 flex justify-between items-center">
+            <CardFooter className="p-4 flex justify-between items-center flex-wrap">
               <ul
-                className={`text-xs text-zinc-700 flex h-5 items-center  ${styles.footerlist}`}
+                className={`text-xs text-zinc-700 flex h-5 items-center  ${styles.footerlist} flex-wrap`}
               >
                 {paper?.year && <li>{paper.year}</li>}
                 {paper?.citationCount && (
@@ -67,45 +67,16 @@ export function PapersList({ papers }: { papers: Paper[] }) {
                     citations <Badge>{paper?.citationCount}</Badge>
                   </li>
                 )}
-                {paper?.fieldsOfStudy?.length && (
+                {paper?.fieldsOfStudy?.length > 0 && (
                   <Fields fieldsOfStudy={paper.fieldsOfStudy} />
                 )}
 
-                {paper?.publicationTypes?.length && (
+                {paper?.publicationTypes?.length > 0 && (
                   <Fields fieldsOfStudy={paper.publicationTypes} />
                 )}
               </ul>
 
-              <ul className={`flex h-5 items-center`}>
-                <li>
-                  <Button
-                    variant="outline"
-                    className="flex items-center justify-between gap-1 p-0 px-3 border-0 bg-transparent shadow-transparent hover:bg-transparent hover: group"
-                  >
-                    <Pin
-                      className="text-primary transition-all duration-300 ease-in-out fill-none group-hover:fill-current"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth={2}
-                    />
-                    <span className="text-primary text-base">Save</span>
-                  </Button>
-                </li>
-                <li>
-                  <Link
-                    href={`/paper/${paper?.paperId}`}
-                    className="flex items-center justify-between gap-1 p-0 px-3 border-0 bg-transparent shadow-transparent hover:bg-transparent hover: group"
-                  >
-                    <Glasses
-                      className="text-primary transition-all duration-300 ease-in-out fill-none group-hover:fill-current"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth={2}
-                    />
-                    <span className="text-primary text-base">See</span>
-                  </Link>
-                </li>
-              </ul>
+              <PaperActions paperId={paper.paperId} />
             </CardFooter>
           </Card>
         ))}

@@ -49,20 +49,20 @@ export default function GoToPapers() {
   );
 
   return (
-    <div className="w-full relative">
+    <div className="w-full relative px-10">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
           className="flex gap-4 justify-center  mt-3"
         >
-          <div className="relative w-[80%]">
-            <Image
+          <div className="relative w-full ">
+            {/* <Image
               src="/undraw_arrow.svg"
               width={70}
               height={50}
               alt="Picture of the author"
               className="absolute -left-20 top-5 animate-bounce"
-            />
+            /> */}
             <FormField
               control={form.control}
               name="query"
