@@ -35,7 +35,9 @@ import {
 } from "lucide-react";
 import { useUser } from "@clerk/nextjs";
 import { useMutation, useQuery } from "convex/react";
+import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
 import { api } from "../../../convex/_generated/api";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 export default function DetailPaperPage({
   detailPaper,
 }: {
@@ -129,7 +131,15 @@ export default function DetailPaperPage({
           <CardContent className="flex-1">
             <div>
               <h2 className="font-semibold">Abstract</h2>
-              <p className="leading-7">{detailPaper.abstract}</p>
+              {detailPaper.abstract ? (
+                <p className="leading-7">{detailPaper.abstract}</p>
+              ) : (
+                <Alert className="mt-3">
+                  <ExclamationTriangleIcon className="h-4 w-4" />
+                  <AlertTitle>Message</AlertTitle>
+                  <AlertDescription>No abstarct found</AlertDescription>
+                </Alert>
+              )}
             </div>
           </CardContent>
           <CardFooter>

@@ -115,7 +115,7 @@ export const updateDataUser = mutation({
   args: {
     tokenIdentifier: v.string(),
     favorites: v.optional(v.string()),
-    seeLater: v.optional(v.array(v.string())),
+    seeLater: v.optional(v.string()),
     library: v.optional(
       v.object({ name: v.string(), papers: v.array(v.string()) })
     ),
@@ -139,7 +139,7 @@ export const updateDataUser = mutation({
     }
 
     if (args.seeLater) {
-      newSeeLater = args.seeLater;
+      newSeeLater.push(args.seeLater);
     }
 
     await ctx.db.patch(user._id, {
@@ -170,6 +170,30 @@ export const unfavoritePaper = mutation({
 
     await ctx.db.patch(user._id, {
       favorites: newFavorites,
+    });
+  },
+});
+
+export const undoSeelater = mutation({
+  args: {
+    tokenIdentifier: v.string(),
+    paperId: v.string(),
+  },
+  async handler(ctx, args) {
+    const user = await ctx.db
+      .query("users")
+      .withIndex("by_tokenIdentifier", (q) =>
+        q.eq("tokenIdentifier", args.tokenIdentifier)
+      )
+      .first();
+
+    if (!user) {
+      throw new ConvexError("no user with this token found");
+    }
+    const newSeeLater = user.seeLater?.filter((f) => f !== args.paperId);
+
+    await ctx.db.patch(user._id, {
+      seeLater: newSeeLater,
     });
   },
 });

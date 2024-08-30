@@ -57,6 +57,14 @@ export default function DetailsAuthors({ paperId }: { paperId: string }) {
           </div>
         )}
 
+        {authors.length === 0 && !isPending && (
+          <Alert>
+            <ExclamationTriangleIcon className="h-4 w-4" />
+            <AlertTitle>Message</AlertTitle>
+            <AlertDescription>No authors found</AlertDescription>
+          </Alert>
+        )}
+
         {authors.length > 0 && (
           <Swiper
             slidesPerView={1}

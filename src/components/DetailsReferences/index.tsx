@@ -8,19 +8,42 @@ import {
 } from "@/components/ui/card";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { getDetailsReferences } from "@/app/actions/papers";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery as tanstackUseQuery } from "@tanstack/react-query";
 import { PaperDetails } from "./types";
-import { FileText, BellPlus, Scaling, MailOpen } from "lucide-react";
+import { FileText, BellPlus, MailOpen } from "lucide-react";
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
 import { Button } from "../ui/button";
 import Link from "next/link";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import { useUser } from "@clerk/nextjs";
+import { useMutation, useQuery } from "convex/react";
+import { api } from "../../../convex/_generated/api";
 export default function DetailsReferences({ paperId }: { paperId: string }) {
-  const { isPending, error, data } = useQuery({
+  const { user } = useUser();
+  const updateDataUser: any = useMutation(api.users.updateDataUser);
+
+  const { isPending, error, data } = tanstackUseQuery({
     queryKey: ["getDetailsReferences"],
     queryFn: () => getDetailsReferences(paperId),
   });
 
+  const infoUser = useQuery(api.users.getInfoUser, {
+    tokenIdentifier: user?.id || "",
+  });
+
+  const handleSeelater = async (paperId: string) => {
+    if (!paperId || !user?.id) return;
+    updateDataUser({ tokenIdentifier: user?.id, seeLater: paperId });
+  };
+
   const references: PaperDetails[] = data?.data || [];
+
+  console.log(references);
 
   return (
     <Card>
@@ -49,30 +72,30 @@ export default function DetailsReferences({ paperId }: { paperId: string }) {
           </div>
         )}
 
-        {references.length > 0 && (
-          <div className="flex flex-col justify-between gap-8">
-            {references.map((reference) => {
-              return (
-                <div
-                  key={reference.citedPaper.corpusId}
-                  className="text-sm text-muted-foreground "
-                >
-                  <h3 className="flex items-center gap-6  ">
-                    <div className="flex items-center gap-4">
-                      <FileText />
-                      <Link
-                        href={`${reference.citedPaper.url}`}
-                        target="_blank"
-                        className="border-slate-300 text-slate-800 border-r pr-6 flex items-center gap-2"
-                      >
-                        {reference.citedPaper.title}{" "}
-                        <Scaling height={16} width={16} />
-                      </Link>
-                    </div>
+        {references.length === 0 && !isPending && (
+          <Alert>
+            <ExclamationTriangleIcon className="h-4 w-4" />
+            <AlertTitle>Message</AlertTitle>
+            <AlertDescription>No references found</AlertDescription>
+          </Alert>
+        )}
 
+        {references.length > 0 && (
+          <>
+            <Accordion type="single" collapsible>
+              {references.map((item, index) => (
+                <AccordionItem
+                  key={item.citedPaper.paperId}
+                  value={`item-${index}`}
+                >
+                  <AccordionTrigger className="flex items-center gap-2 justify-start">
+                    <FileText />{" "}
+                    <span className="text-left">{item.citedPaper.title}</span>
+                  </AccordionTrigger>
+                  <AccordionContent className="flex items-center gap-3">
                     <div className=" border-slate-300 border-r  pr-6">
                       <Link
-                        href={`/paper/${reference.citedPaper.paperId}`}
+                        href={`/paper/${item.citedPaper.paperId}`}
                         className="border-slate-300  hover:text-primary   flex items-center gap-2"
                       >
                         <MailOpen height={16} width={16} />
@@ -80,18 +103,25 @@ export default function DetailsReferences({ paperId }: { paperId: string }) {
                       </Link>
                     </div>
                     <div>
-                      <Button
-                        variant="ghost"
-                        className="flex items-center gap-2 p-0 h-fit hover:bg-transparent hover:text-primary"
-                      >
-                        <BellPlus height={16} width={16} />
-                        See later
-                      </Button>
+                      {!infoUser?.seeLater?.includes(
+                        item.citedPaper.paperId
+                      ) && (
+                        <Button
+                          variant="ghost"
+                          className="flex items-center gap-2 p-0 h-fit hover:bg-transparent hover:text-primary"
+                          onClick={() =>
+                            handleSeelater(item.citedPaper.paperId)
+                          }
+                        >
+                          <BellPlus height={16} width={16} />
+                          See later
+                        </Button>
+                      )}
                     </div>
-                    {reference?.isInfluential && (
+                    {item?.isInfluential && (
                       <div className=" border-slate-300 border-l  pl-6">
                         <Link
-                          href={`/paper/${reference.citedPaper.paperId}`}
+                          href={`/paper/${item.citedPaper.paperId}`}
                           className="border-slate-300  hover:text-primary   flex items-center gap-2 semi-bold"
                         >
                           <strong className="semi-bold text-green-700">
@@ -100,11 +130,11 @@ export default function DetailsReferences({ paperId }: { paperId: string }) {
                         </Link>
                       </div>
                     )}
-                  </h3>
-                </div>
-              );
-            })}
-          </div>
+                  </AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
+          </>
         )}
 
         {error && (

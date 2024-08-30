@@ -6,20 +6,42 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { getDetailsCitations } from "@/app/actions/papers";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery as tanstackUseQuery } from "@tanstack/react-query";
 import { PaperContext } from "./types";
 import { FileText, BellPlus, Scaling, MailOpen } from "lucide-react";
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
 
 import { Button } from "../ui/button";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import Link from "next/link";
+import { useUser } from "@clerk/nextjs";
+import { useMutation, useQuery } from "convex/react";
+import { api } from "../../../convex/_generated/api";
 export default function DetailsCitations({ paperId }: { paperId: string }) {
-  const { isPending, error, data } = useQuery({
+  const { user } = useUser();
+  const updateDataUser: any = useMutation(api.users.updateDataUser);
+
+  const { isPending, error, data } = tanstackUseQuery({
     queryKey: ["getDetailsCitations"],
     queryFn: () => getDetailsCitations(paperId),
   });
+
+  const infoUser = useQuery(api.users.getInfoUser, {
+    tokenIdentifier: user?.id || "",
+  });
+
+  const handleSeelater = async (paperId: string) => {
+    if (!paperId || !user?.id) return;
+    updateDataUser({ tokenIdentifier: user?.id, seeLater: paperId });
+  };
 
   const citations: PaperContext[] = data?.data || [];
 
@@ -52,30 +74,30 @@ export default function DetailsCitations({ paperId }: { paperId: string }) {
           </div>
         )}
 
-        {citations.length > 0 && (
-          <div className="flex flex-col justify-between gap-8">
-            {citations.map((citation) => {
-              return (
-                <div
-                  key={citation.citingPaper.paperId}
-                  className="text-sm text-muted-foreground "
-                >
-                  <h3 className="flex items-center gap-6  ">
-                    <div className="flex items-center gap-4">
-                      <FileText />
-                      <Link
-                        href={`${citation.citingPaper.url}`}
-                        target="_blank"
-                        className="border-slate-300 text-slate-800 border-r pr-6 flex items-center gap-2"
-                      >
-                        {citation.citingPaper.title}
-                        <Scaling height={16} width={16} />
-                      </Link>
-                    </div>
+        {citations.length === 0 && !isPending && (
+          <Alert>
+            <ExclamationTriangleIcon className="h-4 w-4" />
+            <AlertTitle>Message</AlertTitle>
+            <AlertDescription>No citations found</AlertDescription>
+          </Alert>
+        )}
 
+        {citations.length > 0 && (
+          <>
+            <Accordion type="single" collapsible>
+              {citations.map((item, index) => (
+                <AccordionItem
+                  key={item.citingPaper.corpusId}
+                  value={`item-${index}`}
+                >
+                  <AccordionTrigger className="flex items-center gap-2 justify-start">
+                    <FileText />{" "}
+                    <span className="text-left">{item.citingPaper.title}</span>
+                  </AccordionTrigger>
+                  <AccordionContent className="flex items-center gap-3">
                     <div className=" border-slate-300 border-r  pr-6">
                       <Link
-                        href={`/paper/${citation.citingPaper.paperId}`}
+                        href={`/paper/${item.citingPaper.paperId}`}
                         className="border-slate-300  hover:text-primary   flex items-center gap-2"
                       >
                         <MailOpen height={16} width={16} />
@@ -83,19 +105,38 @@ export default function DetailsCitations({ paperId }: { paperId: string }) {
                       </Link>
                     </div>
                     <div>
-                      <Button
-                        variant="ghost"
-                        className="flex items-center gap-2 p-0 h-fit hover:bg-transparent hover:text-primary"
-                      >
-                        <BellPlus height={16} width={16} />
-                        See later
-                      </Button>
+                      {!infoUser?.seeLater?.includes(
+                        item.citingPaper.paperId
+                      ) && (
+                        <Button
+                          variant="ghost"
+                          className="flex items-center gap-2 p-0 h-fit hover:bg-transparent hover:text-primary"
+                          onClick={() =>
+                            handleSeelater(item.citingPaper.paperId)
+                          }
+                        >
+                          <BellPlus height={16} width={16} />
+                          See later
+                        </Button>
+                      )}
                     </div>
-                  </h3>
-                </div>
-              );
-            })}
-          </div>
+                    {item?.isInfluential && (
+                      <div className=" border-slate-300 border-l  pl-6">
+                        <Link
+                          href={`/paper/${item.citingPaper.paperId}`}
+                          className="border-slate-300  hover:text-primary   flex items-center gap-2 semi-bold"
+                        >
+                          <strong className="semi-bold text-green-700">
+                            ⭐️ Influential
+                          </strong>{" "}
+                        </Link>
+                      </div>
+                    )}
+                  </AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
+          </>
         )}
 
         {error && (
