@@ -35,18 +35,6 @@ function Header() {
             </SignedOut>
             <SignedIn>
               <UserButton />
-              <DropdownMenu>
-                <DropdownMenuTrigger>
-                  <AlignJustify />
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem>
-                    <Link href="/painel/all-files">Meu painel</Link>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
             </SignedIn>
           </div>
         </div>

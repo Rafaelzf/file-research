@@ -1,8 +1,6 @@
-"use client";
-
-export default function Loading() {
+export default function Loader() {
   return (
-    <main className="flex flex-col  gap-6 container mx-auto py-10 ">
+    <>
       <div className="border border-violet-200 shadow rounded-md p-4  w-full mx-auto">
         <div className="animate-pulse flex space-x-4">
           <div className="rounded-full bg-slate-400 h-20 w-20"></div>
@@ -36,6 +34,6 @@ export default function Loading() {
           </div>
         </div>
       </div>
-    </main>
+    </>
   );
 }

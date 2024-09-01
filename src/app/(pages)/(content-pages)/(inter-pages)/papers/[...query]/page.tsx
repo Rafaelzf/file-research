@@ -1,5 +1,5 @@
 import { getPapers } from "@/app/actions/papers";
-import { Paper, SearchResponse } from "./types";
+import { SearchResponse } from "./types";
 import { Alert, AlertTitle } from "@/components/ui/alert";
 import { Rocket } from "lucide-react";
 

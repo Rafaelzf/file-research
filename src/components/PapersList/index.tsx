@@ -1,5 +1,4 @@
 "use client";
-import { useUser } from "@clerk/clerk-react";
 import {
   Card,
   CardContent,
@@ -30,7 +29,7 @@ export function PapersList({ papers }: { papers: Paper[] }) {
 
   return (
     <>
-      {localPapers &&
+      {localPapers.length > 1 &&
         localPapers.map((paper: Paper, index: number) => (
           <Card key={index} className="border border-sky-500">
             <CardHeader>

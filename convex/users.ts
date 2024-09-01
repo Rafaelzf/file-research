@@ -36,7 +36,7 @@ export const createUser = internalMutation({
     favorites: v.optional(v.array(v.string())),
     seeLater: v.optional(v.array(v.string())),
     library: v.optional(
-      v.object({ name: v.string(), papers: v.array(v.string()) })
+      v.array(v.object({ name: v.string(), papers: v.array(v.string()) }))
     ),
   },
   async handler(ctx, args) {
@@ -49,7 +49,7 @@ export const createUser = internalMutation({
       image: args.image,
       favorites: args.favorites || [],
       seeLater: args.seeLater || [],
-      library: args.library,
+      library: args.library || [],
     });
   },
 });
@@ -65,7 +65,7 @@ export const updateUser = internalMutation({
     favorites: v.optional(v.array(v.string())),
     seeLater: v.optional(v.array(v.string())),
     library: v.optional(
-      v.object({ name: v.string(), papers: v.array(v.string()) })
+      v.array(v.object({ name: v.string(), papers: v.array(v.string()) }))
     ),
   },
   async handler(ctx, args) {
@@ -88,7 +88,7 @@ export const updateUser = internalMutation({
       role: args.role,
       favorites: args.favorites || [],
       seeLater: args.seeLater || [],
-      library: args.library || undefined,
+      library: args.library || [],
     });
   },
 });
@@ -117,7 +117,7 @@ export const updateDataUser = mutation({
     favorites: v.optional(v.string()),
     seeLater: v.optional(v.string()),
     library: v.optional(
-      v.object({ name: v.string(), papers: v.array(v.string()) })
+      v.array(v.object({ name: v.string(), papers: v.array(v.string()) }))
     ),
   },
   async handler(ctx, args) {
@@ -145,7 +145,7 @@ export const updateDataUser = mutation({
     await ctx.db.patch(user._id, {
       favorites: newFavorites,
       seeLater: newSeeLater,
-      library: args.library || undefined,
+      library: args.library || [],
     });
   },
 });
@@ -194,6 +194,30 @@ export const undoSeelater = mutation({
 
     await ctx.db.patch(user._id, {
       seeLater: newSeeLater,
+    });
+  },
+});
+
+export const deleteItemlibrary = mutation({
+  args: {
+    tokenIdentifier: v.string(),
+    libraryName: v.string(),
+  },
+  async handler(ctx, args) {
+    const user = await ctx.db
+      .query("users")
+      .withIndex("by_tokenIdentifier", (q) =>
+        q.eq("tokenIdentifier", args.tokenIdentifier)
+      )
+      .first();
+
+    if (!user) {
+      throw new ConvexError("no user with this token found");
+    }
+    const newLibrary = user.library?.filter((f) => f.name !== args.libraryName);
+
+    await ctx.db.patch(user._id, {
+      library: newLibrary,
     });
   },
 });

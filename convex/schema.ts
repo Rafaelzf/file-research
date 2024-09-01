@@ -14,7 +14,7 @@ export default defineSchema({
     favorites: v.optional(v.array(v.string())),
     seeLater: v.optional(v.array(v.string())),
     library: v.optional(
-      v.object({ name: v.string(), papers: v.array(v.string()) })
+      v.array(v.object({ name: v.string(), papers: v.array(v.string()) }))
     ),
   }).index("by_tokenIdentifier", ["tokenIdentifier"]),
 });

@@ -5,15 +5,23 @@ import {
   SheetContent,
   SheetDescription,
   SheetHeader,
-  SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { useRouter } from "next/navigation";
-import { PanelRightClose, BellPlus, Pin } from "lucide-react";
+import { PanelRightClose, BellPlus, Pin, LayoutList } from "lucide-react";
+import { useQuery } from "convex/react";
+import { useUser } from "@clerk/nextjs";
 
+import { api } from "../../../convex/_generated/api";
+import { Badge } from "../ui/badge";
 export default function Sidebar() {
+  const { user } = useUser();
   const router = useRouter();
   const [confirmOpen, setConfirmOpen] = useState(false);
+
+  const infoUser = useQuery(api.users.getInfoUser, {
+    tokenIdentifier: user?.id || "",
+  });
 
   //   router.push(`/papers/${encodeURIComponent(values.query)}`);
 
@@ -36,6 +44,11 @@ export default function Sidebar() {
                 >
                   <Pin className="text-primary" />
                   <span>Favorites</span>
+                  {infoUser &&
+                    infoUser?.favorites &&
+                    infoUser?.favorites?.length > 0 && (
+                      <Badge>{infoUser?.favorites?.length}</Badge>
+                    )}
                 </li>
                 <li
                   className="flex items-center gap-3 text-lg text-primary py-3 px-20 hover:bg-slate-100 rounded-md cursor-pointer"
@@ -46,6 +59,28 @@ export default function Sidebar() {
                 >
                   <BellPlus className="text-primary" />
                   <span>See Later</span>
+
+                  {infoUser &&
+                    infoUser?.seeLater &&
+                    infoUser?.seeLater?.length > 0 && (
+                      <Badge>{infoUser?.seeLater?.length}</Badge>
+                    )}
+                </li>
+                <li
+                  className="flex items-center gap-3 text-lg text-primary py-3 px-20 hover:bg-slate-100 rounded-md cursor-pointer"
+                  onClick={() => {
+                    router.push(`/bookmarks/${infoUser?.tokenIdentifier}`);
+                    setConfirmOpen(false);
+                  }}
+                >
+                  <LayoutList className="text-primary" />
+                  <span>Bookmarks</span>
+
+                  {infoUser &&
+                    infoUser?.library &&
+                    infoUser?.library?.length > 0 && (
+                      <Badge>{infoUser?.library?.length}</Badge>
+                    )}
                 </li>
               </ul>
             </SheetDescription>

@@ -43,8 +43,6 @@ export default function DetailsReferences({ paperId }: { paperId: string }) {
 
   const references: PaperDetails[] = data?.data || [];
 
-  console.log(references);
-
   return (
     <Card>
       <CardHeader>

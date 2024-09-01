@@ -17,6 +17,10 @@ import DetailsReferences from "./DetailsReferences";
 import DetailsAuthors from "./DetailsAuthors";
 import Sidebar from "./Sidebar";
 import PaperActions from "./PaperActions";
+import { BookmarksBoxes } from "./BookmarksBoxes";
+import CreateBookMarks from "./CreateBookMarks";
+import Loader from "./Loader";
+import ErrorComponent from "./Error";
 
 export {
   Header,
@@ -37,4 +41,8 @@ export {
   DetailsAuthors,
   Sidebar,
   PaperActions,
+  BookmarksBoxes,
+  CreateBookMarks,
+  Loader,
+  ErrorComponent,
 };

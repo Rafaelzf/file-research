@@ -1,3 +1,4 @@
+"use server";
 import {
   FIELDS_DETAILS_PAPER,
   FIELDS_DETAILS_REFERENCES,
@@ -33,6 +34,47 @@ export async function getPapers(query: string, page: string) {
     }
   } catch (error) {
     console.error("Failed to fetch data:", error);
+    throw new Error("Failed to fetch papers");
+  }
+}
+
+export async function getMultiplePapers(
+  paperIds: string[] = [],
+  page?: string
+) {
+  const newPage = page ? Number(page) : 1;
+  const fields = [...FIELDS_SEARCH_PAPERS].join(",");
+  // const paperIds = ["649def34f8be52c8b66281af98ae884c09aef38b", "ARXIV:2106.15928"];
+
+  const semanticscholarURL = new URL(
+    `https://api.semanticscholar.org/graph/v1/paper/batch`
+  );
+
+  semanticscholarURL.searchParams.append("limit", "6");
+  semanticscholarURL.searchParams.append("fields", fields);
+  semanticscholarURL.searchParams.append("offset", `${(newPage - 1) * 6}`);
+
+  // if (paperIds.length < 1) {
+  //   return [];
+  // }
+
+  try {
+    const response = await fetch(semanticscholarURL.toString(), {
+      method: "POST",
+      headers: { "x-api-key": "zeRLQ1ESsB2Pqx17ApzwN8MKXJklPcObaLSWPtP6" },
+      body: JSON.stringify({
+        ids: ["649def34f8be52c8b66281af98ae884c09aef38b", "ARXIV:2106.15928"],
+      }),
+    });
+
+    if (response.ok) {
+      return response.json();
+    } else {
+      console.error("Failed to fetch data1:", response);
+      throw new Error("Failed to fetch papers");
+    }
+  } catch (error) {
+    console.error("Failed to fetch data2:", error);
     throw new Error("Failed to fetch papers");
   }
 }

@@ -1,4 +1,6 @@
 import { GoToPapers } from "@/components";
+import { Suspense } from "react";
+import Loading from "./loading";
 
 export default async function Layout({
   children,
@@ -11,7 +13,7 @@ export default async function Layout({
         <GoToPapers />
       </header>
 
-      <>{children}</>
+      <Suspense fallback={<Loading />}>{children}</Suspense>
     </div>
   );
 }
