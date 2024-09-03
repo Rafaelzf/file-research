@@ -45,8 +45,6 @@ export default function DetailsCitations({ paperId }: { paperId: string }) {
 
   const citations: PaperContext[] = data?.data || [];
 
-  console.log(data);
-
   return (
     <Card>
       <CardHeader>

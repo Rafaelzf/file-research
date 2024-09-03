@@ -29,7 +29,7 @@ export function PapersList({ papers }: { papers: Paper[] }) {
 
   return (
     <>
-      {localPapers.length > 1 &&
+      {localPapers.length > 0 &&
         localPapers.map((paper: Paper, index: number) => (
           <Card key={index} className="border border-sky-500">
             <CardHeader>

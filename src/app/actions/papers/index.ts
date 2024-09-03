@@ -44,7 +44,6 @@ export async function getMultiplePapers(
 ) {
   const newPage = page ? Number(page) : 1;
   const fields = [...FIELDS_SEARCH_PAPERS].join(",");
-  // const paperIds = ["649def34f8be52c8b66281af98ae884c09aef38b", "ARXIV:2106.15928"];
 
   const semanticscholarURL = new URL(
     `https://api.semanticscholar.org/graph/v1/paper/batch`
@@ -54,16 +53,16 @@ export async function getMultiplePapers(
   semanticscholarURL.searchParams.append("fields", fields);
   semanticscholarURL.searchParams.append("offset", `${(newPage - 1) * 6}`);
 
-  // if (paperIds.length < 1) {
-  //   return [];
-  // }
+  if (paperIds.length < 1) {
+    return [];
+  }
 
   try {
     const response = await fetch(semanticscholarURL.toString(), {
       method: "POST",
       headers: { "x-api-key": "zeRLQ1ESsB2Pqx17ApzwN8MKXJklPcObaLSWPtP6" },
       body: JSON.stringify({
-        ids: ["649def34f8be52c8b66281af98ae884c09aef38b", "ARXIV:2106.15928"],
+        ids: paperIds,
       }),
     });
 

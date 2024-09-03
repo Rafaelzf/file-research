@@ -16,6 +16,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { useMutation } from "convex/react";
 import { api } from "../../../convex/_generated/api";
+import { ToastAction } from "@/components/ui/toast";
+import { useToast } from "../ui/use-toast";
 
 export default function CreateBookMarks({
   tokenIdentifier,
@@ -24,6 +26,7 @@ export default function CreateBookMarks({
   tokenIdentifier: string;
   userLibrary: { name: string; papers: string[] }[];
 }) {
+  const { toast } = useToast();
   const updateDataUser: any = useMutation(api.users.updateDataUser);
 
   const formSchema = z.object({
@@ -51,7 +54,15 @@ export default function CreateBookMarks({
       (item) => item.name === values.listName
     );
 
-    if (hasLibraryName) return;
+    if (hasLibraryName) {
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: "List name already exists.",
+        action: <ToastAction altText="Try again">Try again</ToastAction>,
+      });
+      return;
+    }
 
     const newLibrary = [...userLibrary, ...library];
 

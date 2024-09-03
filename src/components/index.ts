@@ -21,6 +21,7 @@ import { BookmarksBoxes } from "./BookmarksBoxes";
 import CreateBookMarks from "./CreateBookMarks";
 import Loader from "./Loader";
 import ErrorComponent from "./Error";
+import LinkCategories from "./LinkCategories";
 
 export {
   Header,
@@ -45,4 +46,5 @@ export {
   CreateBookMarks,
   Loader,
   ErrorComponent,
+  LinkCategories,
 };

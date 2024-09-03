@@ -145,7 +145,7 @@ export const updateDataUser = mutation({
     await ctx.db.patch(user._id, {
       favorites: newFavorites,
       seeLater: newSeeLater,
-      library: args.library || [],
+      library: args.library || user.library || [],
     });
   },
 });

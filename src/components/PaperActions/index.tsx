@@ -1,6 +1,6 @@
 "use client";
 import { Button } from "../ui/button";
-import { Glasses, Pin, PinOff } from "lucide-react";
+import { Glasses, Pin, PinOff, BellPlus } from "lucide-react";
 import Link from "next/link";
 import { useMutation, useQuery } from "convex/react";
 import { useUser } from "@clerk/nextjs";
@@ -10,6 +10,7 @@ export default function PaperActions({ paperId }: { paperId: string }) {
   const { user } = useUser();
   const updateDataUser: any = useMutation(api.users.updateDataUser);
   const unfavorite: any = useMutation(api.users.unfavoritePaper);
+  const undoSeelater: any = useMutation(api.users.undoSeelater);
 
   const infoUser = useQuery(api.users.getInfoUser, {
     tokenIdentifier: user?.id || "",
@@ -25,13 +26,23 @@ export default function PaperActions({ paperId }: { paperId: string }) {
     unfavorite({ tokenIdentifier: user?.id, paperId: paperId });
   };
 
+  const handleSeelater = async (paperId: string) => {
+    if (!paperId || !user?.id) return;
+    updateDataUser({ tokenIdentifier: user?.id, seeLater: paperId });
+  };
+
+  const handleUndoSeelater = async (paperId: string) => {
+    if (!paperId || !user?.id) return;
+    undoSeelater({ tokenIdentifier: user?.id, paperId: paperId });
+  };
+
   return (
-    <ul className={`flex h-5 items-center flex-wrap`}>
+    <ul className={`flex h-5 items-center flex-wrap gap-5`}>
       {infoUser?.favorites?.includes(paperId) ? (
         <li>
           <Button
             variant="outline"
-            className="flex items-center justify-between gap-1 p-0 px-3 border-0 bg-transparent shadow-transparent hover:bg-transparent hover: group"
+            className="flex items-center justify-between gap-1 p-0 border-0 bg-transparent shadow-transparent hover:bg-transparent hover: group"
             onClick={() => handleUnSaveFavorites(paperId)}
           >
             <PinOff
@@ -39,15 +50,17 @@ export default function PaperActions({ paperId }: { paperId: string }) {
               fill="none"
               stroke="currentColor"
               strokeWidth={1}
+              height={16}
+              width={16}
             />
-            <span className="text-primary text-base">Unfavorite</span>
+            <span className="text-primary ">Unfavorite</span>
           </Button>
         </li>
       ) : (
         <li>
           <Button
             variant="outline"
-            className="flex items-center justify-between gap-1 p-0 px-3 border-0 bg-transparent shadow-transparent hover:bg-transparent hover: group"
+            className="flex items-center justify-between gap-1 p-0  border-0 bg-transparent shadow-transparent hover:bg-transparent hover: group"
             onClick={() => handleSaveFavorites(paperId)}
           >
             <Pin
@@ -55,8 +68,10 @@ export default function PaperActions({ paperId }: { paperId: string }) {
               fill="none"
               stroke="currentColor"
               strokeWidth={1}
+              height={16}
+              width={16}
             />
-            <span className="text-primary text-base">Favorite</span>
+            <span className="text-primary">Favorite</span>
           </Button>
         </li>
       )}
@@ -64,16 +79,53 @@ export default function PaperActions({ paperId }: { paperId: string }) {
       <li>
         <Link
           href={`/paper/${paperId}`}
-          className="flex items-center justify-between gap-1 p-0 px-3 border-0 bg-transparent shadow-transparent hover:bg-transparent hover: group"
+          className="flex items-center justify-between gap-1 p-0  border-0 bg-transparent shadow-transparent hover:bg-transparent hover: group"
         >
           <Glasses
             className="text-primary transition-all duration-300 ease-in-out fill-none group-hover:fill-current"
             fill="none"
             stroke="currentColor"
             strokeWidth={1}
+            height={16}
+            width={16}
           />
-          <span className="text-primary text-base">See</span>
+          <span className="text-primary ">Read</span>
         </Link>
+      </li>
+      <li>
+        {infoUser?.seeLater?.includes(paperId) ? (
+          <Button
+            variant="outline"
+            className="flex items-center justify-between gap-1 p-0  border-0 bg-transparent shadow-transparent hover:bg-transparent hover: group"
+            onClick={() => handleUndoSeelater(paperId)}
+          >
+            <BellPlus
+              className="text-primary transition-all duration-300 ease-in-out fill-none group-hover:fill-current"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={1}
+              height={16}
+              width={16}
+            />
+            <span className="text-primary">Viewed</span>
+          </Button>
+        ) : (
+          <Button
+            variant="outline"
+            className="flex items-center justify-between gap-1 p-0  border-0 bg-transparent shadow-transparent hover:bg-transparent hover: group"
+            onClick={() => handleSeelater(paperId)}
+          >
+            <BellPlus
+              className="text-primary transition-all duration-300 ease-in-out fill-none group-hover:fill-current"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={1}
+              height={16}
+              width={16}
+            />
+            <span className="text-primary">See later</span>
+          </Button>
+        )}
       </li>
     </ul>
   );
