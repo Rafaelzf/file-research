@@ -40,7 +40,7 @@ export default function BookMarkList({
       const dataparams = list ? list[0].papers : [];
       mutation.mutate(dataparams);
     }
-  }, [infoUser, listName]);
+  }, [infoUser, listName, mutation]);
 
   return (
     <>

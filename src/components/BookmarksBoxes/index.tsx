@@ -27,7 +27,7 @@ export function BookmarksBoxes({
       </CardHeader>
       <CardContent>
         <p className="text-sm text-muted-foreground">
-          Number's paper <Badge>{library.papers.length}</Badge>
+          {"Number's paper"} <Badge>{library.papers.length}</Badge>
         </p>
       </CardContent>
       <CardFooter className="flex items-center gap-2">

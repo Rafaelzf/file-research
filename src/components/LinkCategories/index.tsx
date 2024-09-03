@@ -50,7 +50,7 @@ export default function LinkCategories({
       }));
       setBookmarks(bookmarks);
     }
-  }, [library]);
+  }, [library, paperId]);
 
   useEffect(() => {}, [bookmarks]);
   return (
