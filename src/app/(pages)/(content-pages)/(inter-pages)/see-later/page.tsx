@@ -30,7 +30,7 @@ export default function Favorites({}: {}) {
       const dataparams = list || [];
       mutation.mutate(dataparams);
     }
-  }, [infoUser, mutation]);
+  }, [infoUser]);
 
   return (
     <>
