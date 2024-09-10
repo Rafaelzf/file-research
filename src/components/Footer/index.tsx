@@ -13,12 +13,9 @@ export function Footer() {
           >
             <Linkedin height={18} width={18} />
           </Link>
-          <Link
-            className="text-blue-900 hover:text-blue-500 text-sm flex gap-2"
-            href="/about"
-          >
+          <span className="text-blue-900 hover:text-blue-500 text-sm flex gap-2">
             <MailIcon height={18} width={18} /> rf.francucci@gmail.com
-          </Link>
+          </span>
         </div>
       </div>
     </div>
