@@ -19,7 +19,7 @@ export default function Home() {
       <div className="mx-auto max-w-2xl py-8">
         <div className="text-center">
           <Image
-            src="/findpaper_logo.svg"
+            src="/findpaper_logo_header.svg"
             width="200"
             height="200"
             alt="file drive logo"
