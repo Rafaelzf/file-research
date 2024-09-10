@@ -45,11 +45,11 @@ export default async function Papers({
   return (
     <main className="flex flex-col  gap-6 container mx-auto py-10 ">
       {total !== undefined && (
-        <Alert className="flex justify-between items-center">
-          <AlertTitle className="flex items-center gap-4">
-            <Rocket className="h-4 w-4 text-primary" />
-            <span className="flex items-center gap-3 text-zinc-700">
-              <span className="text-blue-700 font-semibold">
+        <Alert className="flex justify-center sm:justify-between items-center">
+          <AlertTitle className="flex sm:flex-row flex-col items-center gap-4">
+            <Rocket className="h-4 w-4 text-primary hidden sm:block" />
+            <span className="flex sm:flex-row flex-col items-center gap-3 text-zinc-700">
+              <span className="text-blue-700 font-semibold text-lg">
                 {totalPageof()}
               </span>{" "}
               relevant papers from a total of
@@ -57,14 +57,14 @@ export default async function Papers({
             </span>
           </AlertTitle>
         </Alert>
-      )}   
+      )}
 
       {papers && <PapersList papers={papers} />}
 
       {total !== 0 && (
         <Link
           href={`/papers/${query}?page=${morePage(page)}`}
-          className="h-11 w-3/4 flex mx-auto justify-center items-center bg-primary rounded-lg text-white hover:bg-violet-700 transition-all bold"
+          className="h-11 w-full sm:w-3/4 flex mx-auto justify-center items-center bg-primary rounded-lg text-white hover:bg-violet-700 transition-all bold"
         >
           See more
         </Link>

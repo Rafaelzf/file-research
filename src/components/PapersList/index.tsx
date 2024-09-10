@@ -33,9 +33,13 @@ export function PapersList({ papers }: { papers: Paper[] }) {
         localPapers.map((paper: Paper, index: number) => (
           <Card key={index} className="border border-sky-500">
             <CardHeader>
-              <CardTitle className="leading-6">{paper?.title}</CardTitle>
+              <CardTitle className="leading-6 text-sm sm:text-base mb-5 sm:mb-0">
+                {paper?.title}
+              </CardTitle>
               {paper?.authors?.length > 0 && (
-                <ul className={`flex text-xs ${styles.authorslist} flex-wrap`}>
+                <ul
+                  className={`flex text-xs ${styles.authorslist} flex-wrap gap-2 sm:gap-0 `}
+                >
                   {paper?.authors.map((author: any, index: number) => {
                     if (index === 6)
                       return (
@@ -49,16 +53,16 @@ export function PapersList({ papers }: { papers: Paper[] }) {
                 </ul>
               )}
             </CardHeader>
-            <CardContent className="p-6 bg-violet-100">
+            <CardContent className="p-6 bg-violet-100 text-sm sm:text-base">
               <p>
                 {paper?.tldr?.text || truncateText(paper?.abstract, 370) || (
                   <span className="text-slate-800">No content available</span>
                 )}
               </p>
             </CardContent>
-            <CardFooter className="p-4 flex justify-between items-center flex-wrap">
+            <CardFooter className="p-4 flex flex-col gap-5 justify-start items-start flex-wrap">
               <ul
-                className={`text-xs text-zinc-700 flex h-5 items-center  ${styles.footerlist} flex-wrap`}
+                className={`text-xs text-zinc-700 flex justify-start  gap-3 sm:gap-4  items-center  ${styles.footerlist} flex-wrap`}
               >
                 {paper?.year && <li>{paper.year}</li>}
                 {paper?.citationCount && (

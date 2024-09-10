@@ -37,7 +37,7 @@ export default function PaperActions({ paperId }: { paperId: string }) {
   };
 
   return (
-    <ul className={`flex h-5 items-center flex-wrap gap-5`}>
+    <ul className={`flex items-center flex-wrap gap-5`}>
       {infoUser?.favorites?.includes(paperId) ? (
         <li>
           <Button

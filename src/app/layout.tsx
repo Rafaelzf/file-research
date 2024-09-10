@@ -41,9 +41,9 @@ export default async function RootLayout({
             <main className="flex-1 flex relative">
               {user && <Sidebar />}
 
-              <div className="w-9/12 mx-auto">{children}</div>
+              <div className="sm:w-9/12 mx-auto">{children}</div>
             </main>
-            {/* <Footer /> */}
+            <Footer />
           </div>
           <Toaster />
           <Analytics />

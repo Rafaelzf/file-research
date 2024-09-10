@@ -17,7 +17,6 @@ import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
 import "swiper/css";
 import "swiper/css/pagination";
 import "./styles.css";
-import { Scaling } from "lucide-react";
 import { Badge } from "../ui/badge";
 
 export default function DetailsAuthors({ paperId }: { paperId: string }) {
@@ -37,7 +36,7 @@ export default function DetailsAuthors({ paperId }: { paperId: string }) {
           Authors ({authors.length})
         </CardTitle>
       </CardHeader>
-      <CardContent className="flex-1">
+      <CardContent className="flex-1 w-[330px] sm:w-full">
         {isPending && (
           <div className="border border-violet-200 shadow rounded-md p-4  w-full mx-auto">
             <div className="animate-pulse flex space-x-4">
@@ -70,19 +69,19 @@ export default function DetailsAuthors({ paperId }: { paperId: string }) {
             slidesPerView={1}
             spaceBetween={10}
             breakpoints={{
-              "@0.00": {
+              640: {
                 slidesPerView: 1,
                 spaceBetween: 10,
               },
-              "@0.75": {
+              768: {
                 slidesPerView: 2,
                 spaceBetween: 20,
               },
-              "@1.00": {
+              1024: {
                 slidesPerView: 3,
                 spaceBetween: 40,
               },
-              "@1.50": {
+              1440: {
                 slidesPerView: 4,
                 spaceBetween: 50,
               },

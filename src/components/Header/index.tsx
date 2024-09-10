@@ -15,16 +15,20 @@ import { Button } from "../ui/button";
 function Header() {
   return (
     <div className="relative z-10 border-b py-4 ">
-      <div className="w-9/12 mx-auto">
+      <div className="sm:w-9/12 mx-auto">
         <div className="items-center container mx-auto justify-between flex">
           <Link href="/" className="flex gap-2 items-center text-xl text-black">
             <Image
-              src="/logo.png"
+              src="/findpaper_logo_header.svg"
               width="50"
               height="50"
               alt="file drive logo"
+              className="border-2 border-primary shadow-2xl rounded-full"
             />
-            Find Research
+            <span className="text-2xl  font-outline-2 font-extrabold  text-center bg-gradient-to-r from-pink-900 via-violet-500 to-indigo-900 inline-block text-transparent bg-clip-text">
+              {" "}
+              Find Papers
+            </span>
           </Link>
 
           <div className="flex gap-2">

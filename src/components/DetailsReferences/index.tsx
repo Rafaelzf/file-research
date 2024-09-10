@@ -87,7 +87,7 @@ export default function DetailsReferences({ paperId }: { paperId: string }) {
                   value={`item-${index}`}
                 >
                   <AccordionTrigger className="flex items-center gap-2 justify-start">
-                    <FileText />{" "}
+                    <FileText className="hidden sm:block" />{" "}
                     <span className="text-left">{item.citedPaper.title}</span>
                   </AccordionTrigger>
                   <AccordionContent className="flex items-center gap-3">

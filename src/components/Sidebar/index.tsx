@@ -26,7 +26,7 @@ export default function Sidebar() {
   //   router.push(`/papers/${encodeURIComponent(values.query)}`);
 
   return (
-    <div className="fixed left-0 bottom-5 ">
+    <div className="fixed left-0 top-52 sm:bottom-5 z-50">
       <Sheet open={confirmOpen} onOpenChange={setConfirmOpen}>
         <SheetTrigger className=" top-36 cursor-pointer text-primary bg-white px-6 py-3 rounded-r-lg shadow-sm">
           <PanelRightClose width={35} height={35} className="text-primary" />

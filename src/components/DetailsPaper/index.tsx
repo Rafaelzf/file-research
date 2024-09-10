@@ -68,8 +68,8 @@ export default function DetailPaperPage({
       <Card className="flex flex-wrap md:flex-nowrap justify-between gap-3 ">
         <div className="md:w-9/12 w-full flex flex-col">
           <CardHeader>
-            <div className="flex justify-between items-center gap-3 border-slate-300 border-b pb-2">
-              <CardTitle className="scroll-m-20   text-2xl font-semibold tracking-tight">
+            <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-3 border-slate-300 border-b pb-4 sm:pb-2 mb-5 sm:mb-0">
+              <CardTitle className="scroll-m-20  leading-8 sm:leading-5  sm:text-1xl font-semibold tracking-tight">
                 {detailPaper.title}
               </CardTitle>
 
@@ -82,10 +82,10 @@ export default function DetailPaperPage({
 
             <div className="flex justify-between items-center gap-4 flex-wrap">
               {detailPaper.authors.length > 0 && (
-                <div className="flex items-center gap-2">
+                <div className="flex flex-col sm:flex-row sm:items-center gap-2">
                   <Users />
                   <ul className="flex items-center gap-2 flex-wrap">
-                    {detailPaper.authors.map((author, index) => {
+                    {detailPaper.authors.map((author, _) => {
                       return (
                         <li
                           key={author.authorId}
@@ -122,13 +122,13 @@ export default function DetailPaperPage({
                       <Link
                         href={detailPaper?.publicationVenue?.url}
                         target="_blank"
-                        className="italic text-sm flex items-center gap-2 text-muted-foreground"
+                        className="italic text-xs sm:text-sm flex items-center gap-2 text-muted-foreground mt-5 "
                       >
                         <BookOpenText />
                         {detailPaper.venue}
                       </Link>
                     ) : (
-                      <span className="italic text-sm flex items-center gap-2 text-muted-foreground">
+                      <span className="italic ttext-xs sm:text-sm flex items-center gap-2 text-muted-foreground">
                         <BookOpenText />
                         {detailPaper.venue}
                       </span>
@@ -152,8 +152,8 @@ export default function DetailPaperPage({
               )}
             </div>
           </CardContent>
-          <CardFooter>
-            <ul className="flex flex-wrap md:flex-nowrap  items-center gap-4">
+          <CardFooter className="mt-8">
+            <ul className="flex flex-wrap md:flex-nowrap  items-center gap-6 sm:gap-4">
               <li className="text-sm text-muted-foreground border-slate-300 border-r pr-2 flex gap-2 items-center">
                 <CalendarDays />{" "}
                 {formatDateToBrazilian(detailPaper?.publicationDate)}
@@ -219,7 +219,7 @@ export default function DetailPaperPage({
                 ) : (
                   <span className="text-sm  border-slate-300 flex items-center gap-2 ">
                     <Lock />
-                    <span>PDF</span>
+                    <span className="line-through">PDF</span>
                   </span>
                 )}
               </li>
