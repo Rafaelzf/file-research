@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Analytics } from "@vercel/analytics/react";
 import { Inter as FontSans } from "next/font/google";
 import { currentUser } from "@clerk/nextjs/server";
 import { cn } from "@/lib/utils";
@@ -44,6 +45,7 @@ export default async function RootLayout({
             {/* <Footer /> */}
           </div>
           <Toaster />
+          <Analytics />
         </body>
       </ConvexClientProvider>
     </html>
