@@ -31,7 +31,7 @@ export default function Home() {
           </h1>
 
           <h1 className="text-2xl mb-2 mt-12 font-outline-2 font-extrabold  text-center bg-gradient-to-r from-pink-900 via-violet-500 to-indigo-900 inline-block text-transparent bg-clip-text">
-            Digite sua pesquisa
+            Type the subject you want to find and press enter
           </h1>
           <GoToPapers />
         </div>
