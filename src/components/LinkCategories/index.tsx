@@ -1,9 +1,13 @@
 "use client";
+
 import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from "@/components/ui/hover-card";
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Checkbox } from "@/components/ui/checkbox";
 import { BookmarkPlus } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -14,10 +18,12 @@ export default function LinkCategories({
   library,
   paperId,
   tokenIdentifier,
+  className,
 }: {
   library: IPropsCategories[];
   paperId: string;
   tokenIdentifier?: string;
+  className?: string;
 }) {
   const updateDataUser: any = useMutation(api.users.updateDataUser);
 
@@ -54,12 +60,26 @@ export default function LinkCategories({
 
   useEffect(() => {}, [bookmarks]);
   return (
-    <HoverCard>
-      <HoverCardTrigger className="flex items-center gap-2 cursor-pointer hover:text-primary">
-        <BookmarkPlus /> Add Bookmarks
-      </HoverCardTrigger>
-      <HoverCardContent>
-        <ul className="flex flex-col gap-5 py-3">
+    <Dialog>
+      <DialogTrigger
+        asChild
+        className="flex items-center gap-2 cursor-pointer hover:text-primary"
+      >
+        <span className={className}>
+          <BookmarkPlus /> Add Bookmarks
+        </span>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle className="color-primary">
+            These are your favorite lists
+          </DialogTitle>
+          <DialogDescription>
+            Choose the list where your paper will be saved, or uncheck to remove
+            it from the list.
+          </DialogDescription>
+        </DialogHeader>
+        <ul className="flex flex-col gap-3 py-3">
           {bookmarks?.map((category, index) => (
             <li
               key={index}
@@ -76,7 +96,7 @@ export default function LinkCategories({
             </li>
           ))}
         </ul>
-      </HoverCardContent>
-    </HoverCard>
+      </DialogContent>
+    </Dialog>
   );
 }

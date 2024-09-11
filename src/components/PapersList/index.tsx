@@ -10,13 +10,20 @@ import styles from "./papers.module.css";
 import { truncateText } from "@/lib/utils";
 import { Badge } from "../ui/badge";
 import Fields from "../Fields";
-
+import { useQuery } from "convex/react";
 import { useEffect, useState } from "react";
 import { Paper } from "@/app/(pages)/(content-pages)/(inter-pages)/papers/[...query]/types";
 import PaperActions from "../PaperActions";
-
+import { api } from "../../../convex/_generated/api";
+import { useUser } from "@clerk/nextjs";
+import LinkCategories from "../LinkCategories";
 export function PapersList({ papers }: { papers: Paper[] }) {
   const [localPapers, setLocalPapers] = useState<Paper[]>(papers);
+  const { user } = useUser();
+
+  const infoUser = useQuery(api.users.getInfoUser, {
+    tokenIdentifier: user?.id || "",
+  });
 
   useEffect(() => {
     setLocalPapers((prev) => {
@@ -33,8 +40,17 @@ export function PapersList({ papers }: { papers: Paper[] }) {
         localPapers.map((paper: Paper, index: number) => (
           <Card key={index} className="border border-sky-500">
             <CardHeader>
-              <CardTitle className="leading-6 text-sm sm:text-base mb-5 sm:mb-0">
-                {paper?.title}
+              <CardTitle className=" mb-5 sm:mb-0 flex  flex-col-reverse sm:flex-row justify-between gap-5">
+                <span className="leading-6 text-sm sm:text-base flex-2">
+                  {paper?.title}
+                </span>
+
+                <LinkCategories
+                  library={infoUser?.library || []}
+                  paperId={paper.paperId}
+                  tokenIdentifier={infoUser?.tokenIdentifier}
+                  className="text-sm text-primary flex-1 flex justify-end"
+                />
               </CardTitle>
               {paper?.authors?.length > 0 && (
                 <ul
