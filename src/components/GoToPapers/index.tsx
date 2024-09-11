@@ -49,7 +49,7 @@ export default function GoToPapers() {
   );
 
   return (
-    <div className="w-full relative">
+    <div className="w-full relative px-8">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
