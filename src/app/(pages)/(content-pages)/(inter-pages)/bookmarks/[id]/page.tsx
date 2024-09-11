@@ -32,7 +32,7 @@ export default function Bookmarks({ params }: { params: { id: string } }) {
       />
 
       {infoUser?.library && infoUser?.library?.length > 0 ? (
-        <div className="flex gap-4">
+        <div className="flex flex-col sm:flex-row gap-4">
           {infoUser?.library.map((library) => (
             <BookmarksBoxes
               key={library.name}

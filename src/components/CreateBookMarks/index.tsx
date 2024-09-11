@@ -81,8 +81,8 @@ export default function CreateBookMarks({
             control={form.control}
             name="listName"
             render={({ field }) => (
-              <FormItem className="flex  gap-6">
-                <div className="w-4/12">
+              <FormItem className="flex flex-col sm:flex-row sm:gap-6">
+                <div className="sm:w-4/12">
                   <FormLabel>List name</FormLabel>
                   <FormControl>
                     <Input
@@ -95,7 +95,7 @@ export default function CreateBookMarks({
                   <FormMessage />
                 </div>
                 <div>
-                  <Button type="submit" className="h-10 mt-5 ">
+                  <Button type="submit" className="h-10 mt-5 w-full ">
                     Create
                   </Button>
                 </div>
