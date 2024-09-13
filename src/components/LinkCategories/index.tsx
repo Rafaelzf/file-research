@@ -99,7 +99,7 @@ export default function LinkCategories({
           </ul>
         ) : (
           <p className="text-primary font-semibold">
-            You don't have any list yet
+            You don{"'"}t have any list yet
           </p>
         )}
       </DialogContent>
