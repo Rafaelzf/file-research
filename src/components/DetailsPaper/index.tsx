@@ -39,6 +39,7 @@ import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
 import { api } from "../../../convex/_generated/api";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import LinkCategories from "../LinkCategories";
+import { useRouter } from "next/navigation";
 
 export default function DetailPaperPage({
   detailPaper,
@@ -46,15 +47,22 @@ export default function DetailPaperPage({
   detailPaper: DetailPaper;
 }) {
   const { user } = useUser();
-
+  const router = useRouter();
   const updateDataUser: any = useMutation(api.users.updateDataUser);
   const unfavorite: any = useMutation(api.users.unfavoritePaper);
 
-  const infoUser = useQuery(api.users.getInfoUser, {
-    tokenIdentifier: user?.id || "",
-  });
+  let infoUser = null;
+
+  if (user) {
+    infoUser = useQuery(api.users.getInfoUser, {
+      tokenIdentifier: user?.id || "",
+    });
+  }
 
   const handleSaveFavorites = async (paperId: string) => {
+    if (!user) {
+      router.push("/sign-in");
+    }
     if (!paperId || !user?.id) return;
     updateDataUser({ tokenIdentifier: user?.id, favorites: paperId });
   };

@@ -19,9 +19,13 @@ export default function Sidebar() {
   const router = useRouter();
   const [confirmOpen, setConfirmOpen] = useState(false);
 
-  const infoUser = useQuery(api.users.getInfoUser, {
-    tokenIdentifier: user?.id || "",
-  });
+  let infoUser = null;
+
+  if (user) {
+    infoUser = useQuery(api.users.getInfoUser, {
+      tokenIdentifier: user?.id || "",
+    });
+  }
 
   //   router.push(`/papers/${encodeURIComponent(values.query)}`);
 
@@ -38,6 +42,11 @@ export default function Sidebar() {
                 <li
                   className="flex items-center gap-3 text-lg text-primary py-3 px-20 hover:bg-slate-100 rounded-md cursor-pointer"
                   onClick={() => {
+                    if (!user) {
+                      router.push("/sign-in");
+                      setConfirmOpen(false);
+                      return;
+                    }
                     router.push("/favorites");
                     setConfirmOpen(false);
                   }}
@@ -45,14 +54,21 @@ export default function Sidebar() {
                   <Pin className="text-primary" />
                   <span>Favorites</span>
                   {infoUser &&
-                    infoUser?.favorites &&
-                    infoUser?.favorites?.length > 0 && (
-                      <Badge>{infoUser?.favorites?.length}</Badge>
-                    )}
+                  infoUser?.favorites &&
+                  infoUser?.favorites?.length > 0 ? (
+                    <Badge>{infoUser?.favorites?.length}</Badge>
+                  ) : (
+                    <Badge>0</Badge>
+                  )}
                 </li>
                 <li
                   className="flex items-center gap-3 text-lg text-primary py-3 px-20 hover:bg-slate-100 rounded-md cursor-pointer"
                   onClick={() => {
+                    if (!user) {
+                      router.push("/sign-in");
+                      setConfirmOpen(false);
+                      return;
+                    }
                     router.push("/see-later");
                     setConfirmOpen(false);
                   }}
@@ -61,14 +77,21 @@ export default function Sidebar() {
                   <span>See Later</span>
 
                   {infoUser &&
-                    infoUser?.seeLater &&
-                    infoUser?.seeLater?.length > 0 && (
-                      <Badge>{infoUser?.seeLater?.length}</Badge>
-                    )}
+                  infoUser?.seeLater &&
+                  infoUser?.seeLater?.length > 0 ? (
+                    <Badge>{infoUser?.seeLater?.length}</Badge>
+                  ) : (
+                    <Badge>0</Badge>
+                  )}
                 </li>
                 <li
                   className="flex items-center gap-3 text-lg text-primary py-3 px-20 hover:bg-slate-100 rounded-md cursor-pointer"
                   onClick={() => {
+                    if (!user) {
+                      router.push("/sign-in");
+                      setConfirmOpen(false);
+                      return;
+                    }
                     router.push(`/bookmarks/${infoUser?.tokenIdentifier}`);
                     setConfirmOpen(false);
                   }}
@@ -77,10 +100,12 @@ export default function Sidebar() {
                   <span>Bookmarks</span>
 
                   {infoUser &&
-                    infoUser?.library &&
-                    infoUser?.library?.length > 0 && (
-                      <Badge>{infoUser?.library?.length}</Badge>
-                    )}
+                  infoUser?.library &&
+                  infoUser?.library?.length > 0 ? (
+                    <Badge>{infoUser?.library?.length}</Badge>
+                  ) : (
+                    <Badge>0</Badge>
+                  )}
                 </li>
               </ul>
             </SheetDescription>

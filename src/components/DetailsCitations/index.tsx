@@ -25,8 +25,10 @@ import Link from "next/link";
 import { useUser } from "@clerk/nextjs";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
+import { useRouter } from "next/navigation";
 export default function DetailsCitations({ paperId }: { paperId: string }) {
   const { user } = useUser();
+  const router = useRouter();
   const updateDataUser: any = useMutation(api.users.updateDataUser);
 
   const { isPending, error, data } = tanstackUseQuery({
@@ -34,11 +36,18 @@ export default function DetailsCitations({ paperId }: { paperId: string }) {
     queryFn: () => getDetailsCitations(paperId),
   });
 
-  const infoUser = useQuery(api.users.getInfoUser, {
-    tokenIdentifier: user?.id || "",
-  });
+  let infoUser = null;
+
+  if (user) {
+    infoUser = useQuery(api.users.getInfoUser, {
+      tokenIdentifier: user?.id || "",
+    });
+  }
 
   const handleSeelater = async (paperId: string) => {
+    if (!user) {
+      router.push("/sign-in");
+    }
     if (!paperId || !user?.id) return;
     updateDataUser({ tokenIdentifier: user?.id, seeLater: paperId });
   };

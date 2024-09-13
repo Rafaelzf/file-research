@@ -5,18 +5,25 @@ import Link from "next/link";
 import { useMutation, useQuery } from "convex/react";
 import { useUser } from "@clerk/nextjs";
 import { api } from "../../../convex/_generated/api";
+import { useRouter } from "next/navigation";
 
 export default function PaperActions({ paperId }: { paperId: string }) {
   const { user } = useUser();
+  const router = useRouter();
   const updateDataUser: any = useMutation(api.users.updateDataUser);
   const unfavorite: any = useMutation(api.users.unfavoritePaper);
   const undoSeelater: any = useMutation(api.users.undoSeelater);
+  let infoUser = null;
 
-  const infoUser = useQuery(api.users.getInfoUser, {
-    tokenIdentifier: user?.id || "",
-  });
-
+  if (user) {
+    infoUser = useQuery(api.users.getInfoUser, {
+      tokenIdentifier: user?.id || "",
+    });
+  }
   const handleSaveFavorites = async (paperId: string) => {
+    if (!user) {
+      router.push("/sign-in");
+    }
     if (!paperId || !user?.id) return;
     updateDataUser({ tokenIdentifier: user?.id, favorites: paperId });
   };
@@ -27,6 +34,9 @@ export default function PaperActions({ paperId }: { paperId: string }) {
   };
 
   const handleSeelater = async (paperId: string) => {
+    if (!user) {
+      router.push("/sign-in");
+    }
     if (!paperId || !user?.id) return;
     updateDataUser({ tokenIdentifier: user?.id, seeLater: paperId });
   };

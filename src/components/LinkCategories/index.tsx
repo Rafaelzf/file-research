@@ -79,23 +79,29 @@ export default function LinkCategories({
             it from the list.
           </DialogDescription>
         </DialogHeader>
-        <ul className="flex flex-col gap-3 py-3">
-          {bookmarks?.map((category, index) => (
-            <li
-              key={index}
-              className="flex items-center gap-2 cursor-pointer hover:bg-slate-100 hover:text-primary py-3 px-2"
-              onClick={() => handleChoose(category.name)}
-            >
-              <Checkbox id={`category-${index}`} checked={category.checked} />
-              <label
-                htmlFor={`category-${index}`}
-                className="text-sm font-medium leading-none"
+        {bookmarks && bookmarks?.length > 0 ? (
+          <ul className="flex flex-col gap-3 py-3">
+            {bookmarks?.map((category, index) => (
+              <li
+                key={index}
+                className="flex items-center gap-2 cursor-pointer hover:bg-slate-100 hover:text-primary py-3 px-2"
+                onClick={() => handleChoose(category.name)}
               >
-                {category.name}
-              </label>
-            </li>
-          ))}
-        </ul>
+                <Checkbox id={`category-${index}`} checked={category.checked} />
+                <label
+                  htmlFor={`category-${index}`}
+                  className="text-sm font-medium leading-none"
+                >
+                  {category.name}
+                </label>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="text-primary font-semibold">
+            You don't have any list yet
+          </p>
+        )}
       </DialogContent>
     </Dialog>
   );

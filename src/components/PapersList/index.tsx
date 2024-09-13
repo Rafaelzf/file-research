@@ -20,10 +20,13 @@ import LinkCategories from "../LinkCategories";
 export function PapersList({ papers }: { papers: Paper[] }) {
   const [localPapers, setLocalPapers] = useState<Paper[]>(papers);
   const { user } = useUser();
+  let infoUser = null;
 
-  const infoUser = useQuery(api.users.getInfoUser, {
-    tokenIdentifier: user?.id || "",
-  });
+  if (user) {
+    infoUser = useQuery(api.users.getInfoUser, {
+      tokenIdentifier: user?.id || "",
+    });
+  }
 
   useEffect(() => {
     setLocalPapers((prev) => {

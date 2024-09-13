@@ -27,8 +27,6 @@ export default function DetailsAuthors({ paperId }: { paperId: string }) {
 
   const authors: Author[] = data?.data || [];
 
-  console.log(authors);
-
   return (
     <Card>
       <CardHeader>

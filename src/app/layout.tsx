@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/react";
 import { Inter as FontSans } from "next/font/google";
-import { currentUser } from "@clerk/nextjs/server";
 import { cn } from "@/lib/utils";
 import "./globals.css";
 
@@ -25,7 +24,6 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const user = await currentUser();
   return (
     <html lang="pt-br" suppressHydrationWarning>
       <ConvexClientProvider>
@@ -39,7 +37,7 @@ export default async function RootLayout({
             <Header />
 
             <main className="flex-1 flex relative">
-              {user && <Sidebar />}
+              <Sidebar />
 
               <div className="sm:w-9/12 mx-auto">{children}</div>
             </main>
