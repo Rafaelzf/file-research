@@ -19,9 +19,9 @@ export default function Sidebar() {
   const router = useRouter();
   const [confirmOpen, setConfirmOpen] = useState(false);
 
-  const infoUser = user
-    ? useQuery(api.users.getInfoUser, { tokenIdentifier: user?.id })
-    : null;
+  const infoUser = useQuery(api.users.getInfoUser, {
+    tokenIdentifier: user ? user.id : "",
+  });
 
   //   router.push(`/papers/${encodeURIComponent(values.query)}`);
 

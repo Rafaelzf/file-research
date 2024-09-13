@@ -13,9 +13,9 @@ export default function PaperActions({ paperId }: { paperId: string }) {
   const updateDataUser: any = useMutation(api.users.updateDataUser);
   const unfavorite: any = useMutation(api.users.unfavoritePaper);
   const undoSeelater: any = useMutation(api.users.undoSeelater);
-  const infoUser = user
-    ? useQuery(api.users.getInfoUser, { tokenIdentifier: user?.id })
-    : null;
+  const infoUser = useQuery(api.users.getInfoUser, {
+    tokenIdentifier: user ? user.id : "",
+  });
   const handleSaveFavorites = async (paperId: string) => {
     if (!user) {
       router.push("/sign-in");

@@ -29,9 +29,9 @@ import { useRouter } from "next/navigation";
 export default function DetailsCitations({ paperId }: { paperId: string }) {
   const { user } = useUser();
   const router = useRouter();
-  const infoUser = user
-    ? useQuery(api.users.getInfoUser, { tokenIdentifier: user?.id })
-    : null;
+  const infoUser = useQuery(api.users.getInfoUser, {
+    tokenIdentifier: user ? user.id : "",
+  });
 
   const updateDataUser: any = useMutation(api.users.updateDataUser);
 

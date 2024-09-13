@@ -7,7 +7,7 @@ export default function ErrorComponent() {
   return (
     <>
       <h4 className="scroll-m-20 text-xl text-primary font-semibold tracking-tight text-center mb-10">
-        Algo deu errado! tente novamente
+        Ops!! something went wrong, try again.
         <Image
           src="/undraw_curved-underline.svg"
           width={100}

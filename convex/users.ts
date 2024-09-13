@@ -104,7 +104,7 @@ export const getInfoUser = query({
       .first();
 
     if (!user) {
-      throw new ConvexError("expected user to be defined");
+      return null;
     }
 
     return user;
