@@ -51,13 +51,9 @@ export default function DetailPaperPage({
   const updateDataUser: any = useMutation(api.users.updateDataUser);
   const unfavorite: any = useMutation(api.users.unfavoritePaper);
 
-  let infoUser = null;
-
-  if (user) {
-    infoUser = useQuery(api.users.getInfoUser, {
-      tokenIdentifier: user?.id || "",
-    });
-  }
+  const infoUser = user
+    ? useQuery(api.users.getInfoUser, { tokenIdentifier: user?.id })
+    : null;
 
   const handleSaveFavorites = async (paperId: string) => {
     if (!user) {
