@@ -83,22 +83,6 @@ export default function PaperActions({ paperId }: { paperId: string }) {
       )}
 
       <li>
-        <Link
-          href={`/paper/${paperId}`}
-          className="flex items-center justify-between gap-1 p-0  border-0 bg-transparent shadow-transparent hover:bg-transparent hover: group"
-        >
-          <Glasses
-            className="text-primary transition-all duration-300 ease-in-out fill-none group-hover:fill-current"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth={1}
-            height={16}
-            width={16}
-          />
-          <span className="text-primary ">Read</span>
-        </Link>
-      </li>
-      <li>
         {infoUser?.seeLater?.includes(paperId) ? (
           <Button
             variant="outline"
@@ -132,6 +116,22 @@ export default function PaperActions({ paperId }: { paperId: string }) {
             <span className="text-primary">See later</span>
           </Button>
         )}
+      </li>
+      <li>
+        <Link
+          href={`/paper/${paperId}`}
+          className="flex items-center justify-between gap-1 p-0  border-0 bg-transparent shadow-transparent hover:bg-transparent hover: group"
+        >
+          <Glasses
+            className="text-primary transition-all duration-300 ease-in-out fill-none group-hover:fill-current"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={1}
+            height={16}
+            width={16}
+          />
+          <span className="text-primary ">Read</span>
+        </Link>
       </li>
     </ul>
   );

@@ -17,6 +17,7 @@ import PaperActions from "../PaperActions";
 import { api } from "../../../convex/_generated/api";
 import { useUser } from "@clerk/nextjs";
 import LinkCategories from "../LinkCategories";
+import Link from "next/link";
 export function PapersList({ papers }: { papers: Paper[] }) {
   const [localPapers, setLocalPapers] = useState<Paper[]>(papers);
   const { user } = useUser();
@@ -40,9 +41,12 @@ export function PapersList({ papers }: { papers: Paper[] }) {
           <Card key={index} className="border border-sky-500">
             <CardHeader>
               <CardTitle className=" mb-5 sm:mb-0 flex  flex-col-reverse sm:flex-row justify-between gap-5">
-                <span className="leading-6 text-sm sm:text-base flex-2">
+                <Link
+                  href={`/paper/${paper.paperId}`}
+                  className="leading-6 text-sm sm:text-base flex-2 hover:text-primary"
+                >
                   {paper?.title}
-                </span>
+                </Link>
 
                 <LinkCategories
                   library={infoUser?.library || []}
