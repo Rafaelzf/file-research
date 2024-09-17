@@ -13,6 +13,60 @@ export const metadata: Metadata = {
   title: "Discover All the Research Papers You Need to Study",
   description:
     "Access an extensive library of academic papers, journals, and articles to support your research, learning, and studies. Our platform makes it easy to find, explore, and download the scholarly resources you need in a variety of fields. Whether you're writing a thesis, working on a project, or preparing for exams, we provide the tools and resources to streamline your academic journey. Start your research with us and gain access to comprehensive academic materials all in one place!",
+  icons: {
+    icon: "/findpaper_logo_header.svg",
+  },
+  authors: [{ name: "FindPaper", url: "https://www.findpapers.click/" }],
+  keywords: ["papers", "library", "research", "study", "academic", "papers"],
+  themeColor: "white",
+  metadataBase: new URL("https://www.findpapers.click/"),
+  openGraph: {
+    title: "Discover All the Research Papers You Need to Study",
+    description:
+      "Access an extensive library of academic papers, journals, and articles to support your research, learning, and studies. Our platform makes it easy to find, explore, and download the scholarly resources you need in a variety of fields. Whether you're writing a thesis, working on a project, or preparing for exams, we provide the tools and resources to streamline your academic journey. Start your research with us and gain access to comprehensive academic materials all in one place!",
+  },
+  twitter: {
+    title: "Discover All the Research Papers You Need to Study",
+    card: "summary_large_image",
+  },
+  viewport: {
+    width: "device-width",
+    initialScale: 1,
+    maximumScale: 1,
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+  alternates: {
+    canonical: "https://www.findpapers.click/",
+  },
+  verification: {
+    google: "https://www.findpapers.click/",
+    yandex: "https://www.findpapers.click/",
+  },
+  referrer: "origin-when-cross-origin",
+  colorScheme: "light",
+  appleWebApp: {
+    title: "Discover All the Research Papers You Need to Study",
+    capable: true,
+    statusBarStyle: "default",
+  },
+  formatDetection: {
+    telephone: false,
+    address: false,
+  },
+  creator: "FindPaper",
+  publisher: "FindPaper",
+  // images: ["/findpaper_logo_header.svg"],
+  // canonical: "https://www.findpapers.click/",
 };
 const fontSans = FontSans({
   subsets: ["latin"],
