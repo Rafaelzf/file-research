@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Analytics } from "@vercel/analytics/react";
 import { Inter as FontSans } from "next/font/google";
 import { cn } from "@/lib/utils";
@@ -18,7 +18,6 @@ export const metadata: Metadata = {
   },
   authors: [{ name: "FindPaper", url: "https://www.findpapers.click/" }],
   keywords: ["papers", "library", "research", "study", "academic", "papers"],
-  themeColor: "white",
   metadataBase: new URL("https://www.findpapers.click/"),
   openGraph: {
     title: "Discover All the Research Papers You Need to Study",
@@ -28,11 +27,6 @@ export const metadata: Metadata = {
   twitter: {
     title: "Discover All the Research Papers You Need to Study",
     card: "summary_large_image",
-  },
-  viewport: {
-    width: "device-width",
-    initialScale: 1,
-    maximumScale: 1,
   },
   robots: {
     index: true,
@@ -53,20 +47,25 @@ export const metadata: Metadata = {
     yandex: "https://www.findpapers.click/",
   },
   referrer: "origin-when-cross-origin",
-  colorScheme: "light",
-  appleWebApp: {
-    title: "Discover All the Research Papers You Need to Study",
-    capable: true,
-    statusBarStyle: "default",
-  },
   formatDetection: {
     telephone: false,
     address: false,
   },
   creator: "FindPaper",
   publisher: "FindPaper",
-  // images: ["/findpaper_logo_header.svg"],
-  // canonical: "https://www.findpapers.click/",
+  appleWebApp: {
+    title: "Discover All the Research Papers You Need to Study",
+    capable: true,
+    statusBarStyle: "default",
+  },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  themeColor: "white",
+  colorScheme: "light",
 };
 const fontSans = FontSans({
   subsets: ["latin"],
